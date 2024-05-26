@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@slidev/parser':
-        specifier: link:slidev/packages/parser
-        version: link:slidev/packages/parser
-      '@slidev/types':
-        specifier: link:slidev/packages/types
-        version: link:slidev/packages/types
       compile:
         specifier: ^0.0.2
         version: 0.0.2
@@ -21,6 +15,12 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
     devDependencies:
+      '@slidev/parser':
+        specifier: link:slidev/packages/parser
+        version: link:slidev/packages/parser
+      '@slidev/types':
+        specifier: link:slidev/packages/types
+        version: link:slidev/packages/types
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9

@@ -49,6 +49,8 @@
     "@types/vscode": "^1.89.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
+    "@slidev/parser": "link:slidev/packages/parser",
+    "@slidev/types": "link:slidev/packages/types",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^8.57.0",
@@ -58,9 +60,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@slidev/parser": "link:slidev/packages/parser",
-    "@slidev/types": "link:slidev/packages/types",
-    "compile": "^0.0.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "compile": "^0.0.2"
   }
 }
