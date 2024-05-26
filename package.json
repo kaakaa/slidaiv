@@ -32,6 +32,11 @@
           "type": ["string", "null"],
           "default": "https://api.openai.com/v1",
           "description": "OpenAI Base URL (default: https://api.openai.com/v1). Enter this if you use OpenAI Compatible API."
+        },
+        "slidaiv.model": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "description": "Model name"
         }
       }
     },

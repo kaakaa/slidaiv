@@ -42,10 +42,19 @@ export function activate(context: vscode.ExtensionContext) {
 				if (slide.start <= position.line && position.line <= slide.end) {
 					// console.log('Current slide:', slide);
 					const frontmatter = yaml.dump(slide.frontmatter);
-					// const content = slide.frontmatter.slidaiv?.instructions;
-					// const content = await generatePageContents();
 
-					const content = await client.generatePageContents('') || 'No response';
+					const prompt = `
+					[Slidev format]
+					- slide size: 980x552px
+					- language: ja
+					[Instructions]
+					- Explain Fujisawa-shi in Japan
+					- Add reference links if needed
+					- Use some images in the slide
+					`
+
+					const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
+					const content = await client.generatePageContents(prompt, model) || 'No response';
 					const page = `---\n${frontmatter}---\n\n${content}\n\n`;
 					// console.log('page', page);
 

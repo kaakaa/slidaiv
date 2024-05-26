@@ -6,13 +6,16 @@ export class Client {
         baseURL = baseURL || 'https://api.openai.com/v1';
         this.client = new OpenAI({apiKey, baseURL});
     }
-    async generatePageContents(prompt: string): Promise<string | null> {
+    async generatePageContents(prompt: string, model:string): Promise<string | null> {
         const resp = await this.client.chat.completions.create({
-            model: 'mock-llm',
+            model: model,
 		    messages: [{
-			    "content":"This is a test.",
+			    "content": prompt,
 		    	"role": "user",
-	    	}],
+            }, {
+                "content": "You are a helpful code assistant that can teach a junior developer how to write Slidev contents.Don't explain the code, don't generate any meta data such as frontmatter, just generate only one page, and just generate the code block itself.",
+                "role": "system",
+            }],
         });
         return resp.choices[0].message.content;
     }
