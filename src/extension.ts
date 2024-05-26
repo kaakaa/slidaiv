@@ -34,7 +34,16 @@ export function activate(context: vscode.ExtensionContext) {
 				if (slide.start <= position.line && position.line <= slide.end) {
 					console.log('Current slide:', slide);
 					const frontmatter = yaml.dump(slide.frontmatter);
-					console.log('Frontmatter:', frontmatter);
+					// TODO: Call AI/LLM service
+					const content = slide.frontmatter.slidaiv?.instructions;
+					const page = `---\n${frontmatter}---\n\n${content}\n\n`;
+					// console.log('page', page);
+
+					const range = new vscode.Range(slide.start, 0, slide.end, 0);
+					const edit = new vscode.WorkspaceEdit();
+					edit.replace(editor.document.uri, range , page);
+					vscode.workspace.applyEdit(edit);
+
 				}
 			});
 		});
