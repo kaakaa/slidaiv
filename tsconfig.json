@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"paths": {
+			"@slidev/parser": ["slidev/packages/parser/src/index.ts"],
+			"@slidev/types": ["slidev/packages/types/src/index.ts"],
+		},
+		"target": "ES2022",
+		"lib": [
+			"ES2022", "dom"
+		],
+		"sourceMap": true,
+		"rootDir": ".",
+		"strict": true   /* enable all strict type-checking options */
+		/* Additional Checks */
+		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
+		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules/**/*", "./slidev/**/*"]
+}
