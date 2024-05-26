@@ -40,17 +40,19 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "mock-server": "prism mock -d ./e2e/mock-openai.yaml"
   },
   "devDependencies": {
+    "@slidev/parser": "link:slidev/packages/parser",
+    "@slidev/types": "link:slidev/packages/types",
+    "@stoplight/prism-cli": "^5.8.1",
     "@types/js-yaml": "^4.0.9",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
     "@types/vscode": "^1.89.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "@slidev/parser": "link:slidev/packages/parser",
-    "@slidev/types": "link:slidev/packages/types",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^8.57.0",
@@ -60,7 +62,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
-    "compile": "^0.0.2"
+    "compile": "^0.0.2",
+    "js-yaml": "^4.1.0"
   }
 }
