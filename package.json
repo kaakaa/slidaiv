@@ -20,6 +20,21 @@
         "title": "Hello World"
       }
     ],
+    "configuration": {
+      "title": "Slidaiv",
+      "properties": {
+        "slidaiv.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API Key"
+        },
+        "slidaiv.baseUrl": {
+          "type": ["string", "null"],
+          "default": "https://api.openai.com/v1",
+          "description": "OpenAI Base URL (default: https://api.openai.com/v1). Enter this if you use OpenAI Compatible API."
+        }
+      }
+    },
     "menus": {
       "editor/context": [
         {
@@ -63,6 +78,7 @@
   },
   "dependencies": {
     "compile": "^0.0.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "openai": "^4.47.1"
   }
 }
