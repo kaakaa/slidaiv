@@ -1,13 +1,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
 
 import type {SlidevMarkdown, SourceSlideInfo} from '@slidev/types';
 import {parse} from '@slidev/parser';
 
 import {ExtensionID} from './constants';
 import {Client} from './client';
+import { obj2yaml } from './utils';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -29,7 +29,6 @@ export function activate(context: vscode.ExtensionContext) {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from demo-webpack!');
-
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			return;
@@ -41,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 			parsed.slides.forEach(async (slide: SourceSlideInfo) => {
 				if (slide.start <= position.line && position.line <= slide.end) {
 					// console.log('Current slide:', slide);
-					const frontmatter = yaml.dump(slide.frontmatter);
+					const frontmatter = obj2yaml(slide.frontmatter);
 
 					const prompt = `
 					[Slidev format]
@@ -55,8 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 					const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 					const content = await client.generatePageContents(prompt, model) || 'No response';
-					const page = `---\n${frontmatter}---\n\n${content}\n\n`;
-					// console.log('page', page);
+					const page = `${frontmatter}\n\n${content}\n\n`;
 
 					const range = new vscode.Range(slide.start, 0, slide.end, 0);
 					const edit = new vscode.WorkspaceEdit();

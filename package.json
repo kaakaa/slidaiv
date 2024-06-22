@@ -29,7 +29,10 @@
           "description": "OpenAI API Key"
         },
         "slidaiv.baseUrl": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "default": "https://api.openai.com/v1",
           "description": "OpenAI Base URL (default: https://api.openai.com/v1). Enter this if you use OpenAI Compatible API."
         },
@@ -64,6 +67,10 @@
     "mock-server": "prism mock -d ./e2e/mock-openai.yaml"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/register": "^7.24.6",
     "@slidev/parser": "link:slidev/packages/parser",
     "@slidev/types": "link:slidev/packages/types",
     "@stoplight/prism-cli": "^5.8.1",

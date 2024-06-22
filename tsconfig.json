@@ -5,6 +5,7 @@
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
+		"skipLibCheck": true,
 		"paths": {
 			"@slidev/parser": ["slidev/packages/parser/src/index.ts"],
 			"@slidev/types": ["slidev/packages/types/src/index.ts"],
