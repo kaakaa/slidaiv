@@ -1,6 +1,6 @@
 {
-  "name": "demo-webpack",
-  "displayName": "demo-webpack",
+  "name": "slidaiv",
+  "displayName": "slidaiv",
   "description": "",
   "version": "0.0.1",
   "packageManager": "pnpm@9.1.2",
@@ -16,8 +16,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "demo-webpack.helloWorld",
-        "title": "Hello World"
+        "command": "slidaiv.generateContents",
+        "title": "Generate Slidev contents"
       }
     ],
     "configuration": {
@@ -46,7 +46,7 @@
     "menus": {
       "editor/context": [
         {
-          "command": "demo-webpack.helloWorld",
+          "command": "slidaiv.generateContents",
           "when": "editorLangId == markdown",
           "group": "navigation"
         }

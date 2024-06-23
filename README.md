@@ -1,6 +1,6 @@
-# demo-webpack README
+# slidaiv README
 
-This is the README for your extension "demo-webpack". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "slidaiv". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

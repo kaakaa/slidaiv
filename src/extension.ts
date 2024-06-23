@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const baseUrl:string|null = vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null;
 	const client = new Client(apiKey, baseUrl);
 
-	let disposable = vscode.commands.registerCommand('demo-webpack.helloWorld', async () => {
+	let disposable = vscode.commands.registerCommand('slidaiv.generateContents', async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			vscode.window.showErrorMessage('No active editor');
