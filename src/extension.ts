@@ -7,7 +7,7 @@ import {parse} from '@slidev/parser';
 
 import {ExtensionID} from './constants';
 import {Client} from './client';
-import { obj2yaml } from './utils';
+import { obj2frontmatter } from './utils';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 			parsed.slides.forEach(async (slide: SourceSlideInfo) => {
 				if (slide.start <= position.line && position.line <= slide.end) {
 					// console.log('Current slide:', slide);
-					const frontmatter = obj2yaml(slide.frontmatter);
+					const frontmatter = obj2frontmatter(slide.frontmatter);
 
 					const prompt = `
 					[Slidev format]
@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 					- Explain Fujisawa-shi in Japan
 					- Add reference links if needed
 					- Use some images in the slide
-					`
+					`;
 
 					const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 					const content = await client.generatePageContents(prompt, model) || 'No response';
