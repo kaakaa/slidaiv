@@ -68,6 +68,14 @@
     "mock-server": "prism mock -d ./e2e/mock-openai.yaml"
   },
   "devDependencies": {
+    "@ampproject/remapping": "2.3.0",
+    "@azure/abort-controller": "1.1.0",
+    "@azure/core-client": "1.9.2",
+    "@azure/core-rest-pipeline": "1.16.0",
+    "@azure/core-tracing": "1.1.2",
+    "@azure/core-util": "1.9.0",
+    "@azure/identity": "4.3.0",
+    "@azure/logger": "1.1.2",
     "@babel/cli": "^7.24.7",
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
