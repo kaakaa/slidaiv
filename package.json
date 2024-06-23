@@ -48,7 +48,7 @@
         {
           "command": "slidaiv.generateContents",
           "when": "editorLangId == markdown",
-          "group": "navigation"
+          "group": "1_modification@99"
         }
       ]
     }
