@@ -31,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from demo-webpack!');
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
+			vscode.window.showErrorMessage('No active editor');
 			return;
 		}
 
