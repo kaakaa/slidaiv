@@ -56,6 +56,7 @@
   "scripts": {
     "preinstall": "./install-slidev.sh",
     "vscode:prepublish": "npm run package",
+    "vscode:package": "vsce package",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
@@ -82,6 +83,7 @@
     "@typescript-eslint/parser": "^7.7.1",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.29.0",
     "eslint": "^8.57.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
@@ -89,7 +91,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "compile": "^0.0.2",
     "js-yaml": "^4.1.0",
     "openai": "^4.47.1"
   }

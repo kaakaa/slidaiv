@@ -21,3 +21,4 @@ jobs:
     - run: sudo apt-get install -y xvfb
     - run: pnpm install
     - run: xvfb-run --auto-servernum pnpm test
+    - run: pnpm run vscode:package
