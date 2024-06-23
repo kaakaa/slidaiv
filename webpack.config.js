@@ -42,13 +42,6 @@ const extensionConfig = {
           }
         ]
       },
-      /*
-      {
-        test: /\.mjs$/,
-        include: /node_modules\/\@slidev/,
-        type: "javascript/auto",
-      }
-      */
     ]
   },
   devtool: 'nosources-source-map',
