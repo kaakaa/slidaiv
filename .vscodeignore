@@ -1,7 +1,9 @@
 .vscode/**
 .vscode-test/**
+e2e/**
 out/**
 node_modules/**
+slidev/**
 src/**
 .gitignore
 .yarnrc

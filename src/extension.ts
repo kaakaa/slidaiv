@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
 import type {SlidevMarkdown, SourceSlideInfo} from '@slidev/types';
@@ -9,23 +7,12 @@ import {ExtensionID} from './constants';
 import {Client} from './client/openai';
 import { obj2frontmatter } from './utils';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "demo-webpack" is now active!');
-
 	const apiKey:string = vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '';
 	const baseUrl:string|null = vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null;
-
 	const client = new Client(apiKey, baseUrl);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('demo-webpack.helloWorld', async () => {
+	let disposable = vscode.commands.registerCommand('slidaiv.generateContents', async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			vscode.window.showErrorMessage('No active editor');
@@ -53,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 				- location, population, famous people in Fujisawa, and famous places
 			`;
 
-			progress.report({ increment: 50, message: 'Call LLM to generate Slidev contents'});
+			progress.report({ increment: 50, message: 'Calling LLM...'});
 			const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 			const content = await client.generatePageContents(prompt, model) || 'No response';
 			const page = `${frontmatter}\n\n${content}\n\n`;
