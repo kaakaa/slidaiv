@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 				- location, population, famous people in Fujisawa, and famous places
 			`;
 
-			progress.report({ increment: 50, message: 'Call LLM to generate Slidev contents'});
+			progress.report({ increment: 50, message: 'Calling LLM...'});
 			const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 			const content = await client.generatePageContents(prompt, model) || 'No response';
 			const page = `${frontmatter}\n\n${content}\n\n`;
