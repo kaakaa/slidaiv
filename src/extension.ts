@@ -6,7 +6,7 @@ import type {SlidevMarkdown, SourceSlideInfo} from '@slidev/types';
 import {parse} from '@slidev/parser';
 
 import {ExtensionID} from './constants';
-import {Client} from './client';
+import {Client} from './client/openai';
 import { obj2frontmatter } from './utils';
 
 // This method is called when your extension is activated
@@ -44,13 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
 					const frontmatter = obj2frontmatter(slide.frontmatter);
 
 					const prompt = `
-					[Slidev format]
-					- slide size: 980x552px
-					- language: ja
-					[Instructions]
-					- Explain Fujisawa-shi in Japan
-					- Add reference links if needed
-					- Use some images in the slide
+					- Explain the topic about Fujisawa-shi in Japan
+					- location, population, famous people in Fujisawa, and famous places
 					`;
 
 					const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
