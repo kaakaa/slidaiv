@@ -40,11 +40,12 @@ Slidev is a versatile slideshow platform that offers:
 - Export to HTML, PDF, or reveal.js
 
 Get started:
-```bash
+` ``bash
 npm i -g slidev
 slidev init <template>  # select a template
 cd .slidev && slidev serve
-```
+` ``
+
 <!-- End -->
 
 # Wrap up
