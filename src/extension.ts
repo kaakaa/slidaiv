@@ -24,7 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
 			title: 'Generating Slidev contents',
 			cancellable: false
 		}, async (progress) => {
-			console.log('start');
 			progress.report({ increment: 0, message: 'Parsing Slidev contents'});
 			const position = editor.selection.active;
 			const parsed = await parse(editor.document.getText(), editor.document.fileName);
@@ -34,15 +33,18 @@ export function activate(context: vscode.ExtensionContext) {
 				progress.report({ increment: 100 });
 				return;
 			}
-			const frontmatter = obj2frontmatter(slide.frontmatter);
-			const prompt = `
-				- Explain the topic about Fujisawa-shi in Japan
-				- location, population, famous people in Fujisawa, and famous places
-			`;
+			const prompt = slide.frontmatter?.slidaiv?.prompt?.map((prompt: string) => `- ${prompt}`).join('\n');
+			if (!prompt) {
+				vscode.window.showErrorMessage('No prompt found in the slide frontmatter');
+				progress.report({ increment: 100 });
+				return;
+			}
 
 			progress.report({ increment: 50, message: 'Calling LLM...'});
 			const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 			const content = await client.generatePageContents(prompt, model) || 'No response';
+
+			const frontmatter = obj2frontmatter(slide.frontmatter);
 			const page = `${frontmatter}\n\n${content}\n\n`;
 
 			progress.report({ increment: 40, message: 'Replace the slide contents'});
