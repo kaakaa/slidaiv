@@ -24,7 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
 			title: 'Generating Slidev contents',
 			cancellable: false
 		}, async (progress) => {
-			console.log('start');
 			progress.report({ increment: 0, message: 'Parsing Slidev contents'});
 			const position = editor.selection.active;
 			const parsed = await parse(editor.document.getText(), editor.document.fileName);
