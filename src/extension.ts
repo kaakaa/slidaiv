@@ -1,11 +1,8 @@
 import * as vscode from 'vscode';
 
-import type {SlidevMarkdown, SourceSlideInfo} from '@slidev/types';
-import {parse} from '@slidev/parser';
-
-import {ExtensionID} from './constants';
-import {Client} from './client/openai';
-import { obj2frontmatter } from './utils';
+import { ExtensionID } from './constants';
+import { Client } from './client/openai';
+import { SlidevPage } from './model/slidev';
 
 export function activate(context: vscode.ExtensionContext) {
 	const apiKey:string = vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '';
@@ -26,38 +23,43 @@ export function activate(context: vscode.ExtensionContext) {
 		}, async (progress) => {
 			progress.report({ increment: 0, message: 'Parsing Slidev contents'});
 			const position = editor.selection.active;
-			const parsed = await parse(editor.document.getText(), editor.document.fileName);
-			const slide = parsed.slides.find((slide: SourceSlideInfo) => slide.start <= position.line && position.line <= slide.end );
-			if (!slide) {
-				vscode.window.showErrorMessage(`No slide found at line:${position.line}`);
+
+			let slidevPage: SlidevPage;
+			let page: string;
+			// parse text and generate contents from LLM
+			try {
+				slidevPage = await SlidevPage.init(
+					editor.document.getText(),
+					editor.document.fileName,
+					position.line
+				);
+				const llmModel: string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
+				page = await slidevPage.rewriteByLLM(client, llmModel);
+			} catch (e: any) {
+				vscode.window.showErrorMessage(`failed to generate Slidev content: ${e.message}`);
 				progress.report({ increment: 100 });
 				return;
 			}
-			const prompt = slide.frontmatter?.slidaiv?.prompt?.map((prompt: string) => `- ${prompt}`).join('\n');
-			if (!prompt) {
-				vscode.window.showErrorMessage('No prompt found in the slide frontmatter');
-				progress.report({ increment: 100 });
-				return;
-			}
-
-			progress.report({ increment: 50, message: 'Calling LLM...'});
-			const model:string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
-			const content = await client.generatePageContents(prompt, model) || 'No response';
-
-			const frontmatter = obj2frontmatter(slide.frontmatter);
-			const page = `${frontmatter}\n\n${content}\n\n`;
-
+			
 			progress.report({ increment: 40, message: 'Replace the slide contents'});
-			const range = new vscode.Range(slide.start, 0, slide.end, 0);
-			const edit = new vscode.WorkspaceEdit();
-			edit.replace(editor.document.uri, range , page);
-			const isEdited = await vscode.workspace.applyEdit(edit);
-			if (!isEdited) {
-				vscode.window.showErrorMessage('Failed to replace the slide contents');
+
+			// apply the generated contents to the editor
+			try {
+				const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
+				const edit = new vscode.WorkspaceEdit();
+				edit.replace(editor.document.uri, range , page);
+				const isEdited = await vscode.workspace.applyEdit(edit);
+				if (!isEdited) {
+					vscode.window.showErrorMessage('Failed to replace the slide contents');
+					progress.report({ increment: 10 });
+					return;
+				}
 				progress.report({ increment: 10 });
+			} catch (e: any) {
+				vscode.window.showErrorMessage(`failed to apply content: ${e.message}`);
+				progress.report({ increment: 100 });
 				return;
 			}
-			progress.report({ increment: 10 });
 		});
 	});
 
