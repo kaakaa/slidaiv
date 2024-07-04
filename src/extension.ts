@@ -7,7 +7,11 @@ import { SlidevPage } from './model/slidev';
 export function activate(context: vscode.ExtensionContext) {
 	const apiKey:string = vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '';
 	const baseUrl:string|null = vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null;
-	const client = new Client(apiKey, baseUrl);
+	const intlNames = new Intl.DisplayNames(['en'], {type: 'language', languageDisplay: "standard"});
+	const locale = intlNames.of(vscode.env.language) || 'English';
+
+	const client = new Client(apiKey, baseUrl, locale);
+
 
 	let disposable = vscode.commands.registerCommand('slidaiv.generateContents', async () => {
 		const editor = vscode.window.activeTextEditor;
@@ -33,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 					editor.document.fileName,
 					position.line
 				);
+				progress.report({ increment: 10, message: 'Generating Slidev contents'});
 				const llmModel: string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 				page = await slidevPage.rewriteByLLM(client, llmModel);
 			} catch (e: any) {
@@ -54,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 					progress.report({ increment: 10 });
 					return;
 				}
-				progress.report({ increment: 10 });
+				progress.report({ increment: 50 });
 			} catch (e: any) {
 				vscode.window.showErrorMessage(`failed to apply content: ${e.message}`);
 				progress.report({ increment: 100 });
