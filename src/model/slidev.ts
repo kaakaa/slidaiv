@@ -3,10 +3,11 @@ import { SourceSlideInfo } from "@slidev/types";
 import { obj2frontmatter } from "../utils";
 
 export class SlidevPage {
-    private _start: number
-    private _end: number
-    private frontmatter: any
-    private prompts: string[]
+    private _start: number;
+    private _end: number;
+    private frontmatter: any;
+    private prompts: string[];
+    private locale: string | null;
 
     // constructor is private and the instance is created by factory method `init`,
     // because it isn't possible to use await in constructor
@@ -18,6 +19,7 @@ export class SlidevPage {
         if (this.prompts.length === 0) {
             throw new Error('No prompt found in the slide frontmatter');
         }
+        this.locale = slide.frontmatter?.slidaiv?.locale || null;
     }
 
     static async init(text: string, filename: string, pos: number) {
@@ -31,7 +33,7 @@ export class SlidevPage {
 
     async rewriteByLLM(client: LLMClient, model: string) {
         const prompt = this.prompts.map((prompt: string) => `- ${prompt}`).join('\n');
-        const content = await client.generatePageContents(prompt, model);
+        const content = await client.generatePageContents(prompt, model, this.locale);
         return `${obj2frontmatter(this.frontmatter)}\n\n${content}\n\n`;
     }
 
