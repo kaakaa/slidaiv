@@ -25,7 +25,6 @@ export class Client implements LLMClient  {
                 "role": "system",
             }],
         });
-        console.log(sysPrompt);
         return resp.choices[0].message.content;
     }
 }

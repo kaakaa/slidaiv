@@ -3,11 +3,11 @@ import { SourceSlideInfo } from "@slidev/types";
 import { obj2frontmatter } from "../utils";
 
 export class SlidevPage {
-    private _start: number
-    private _end: number
-    private frontmatter: any
-    private prompts: string[]
-    private locale: string | null
+    private _start: number;
+    private _end: number;
+    private frontmatter: any;
+    private prompts: string[];
+    private locale: string | null;
 
     // constructor is private and the instance is created by factory method `init`,
     // because it isn't possible to use await in constructor
