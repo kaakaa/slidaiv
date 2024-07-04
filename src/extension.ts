@@ -7,11 +7,7 @@ import { SlidevPage } from './model/slidev';
 export function activate(context: vscode.ExtensionContext) {
 	const apiKey:string = vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '';
 	const baseUrl:string|null = vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null;
-	const intlNames = new Intl.DisplayNames(['en'], {type: 'language', languageDisplay: "standard"});
-	const locale = intlNames.of(vscode.env.language) || 'English';
-
-	const client = new Client(apiKey, baseUrl, locale);
-
+	const client = new Client(apiKey, baseUrl, vscode.env.language);
 
 	let disposable = vscode.commands.registerCommand('slidaiv.generateContents', async () => {
 		const editor = vscode.window.activeTextEditor;
