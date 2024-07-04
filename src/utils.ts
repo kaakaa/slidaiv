@@ -7,7 +7,11 @@ export function obj2frontmatter(obj: any): string {
     return `---\n${yaml.dump(obj)}---`;
 }
 
-export function getLocaleName(locale: string) {
+export function getLocaleName(locale: string): string {
     const intlNames = new Intl.DisplayNames(['en'], {type: 'language', languageDisplay: "standard"});
-	return intlNames.of(locale) || 'English';
+    try {
+	    return intlNames.of(locale) || 'English';
+    } catch(e) {
+        return 'English';
+    }
 }
