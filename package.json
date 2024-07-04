@@ -21,6 +21,26 @@
         "title": "Generate Slidev contents"
       }
     ],
+    "submenus": [
+      {
+        "id": "slidaiv.submenu",
+        "label": "Slidaiv"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "slidaiv.submenu",
+          "when": "editorLangId == markdown",
+          "group": "1_modification@99"
+        }
+      ],
+      "slidaiv.submenu": [
+        {
+          "command": "slidaiv.generateContents"
+        }
+      ]
+    },
     "configuration": {
       "title": "Slidaiv",
       "properties": {
@@ -43,15 +63,6 @@
           "description": "Model name"
         }
       }
-    },
-    "menus": {
-      "editor/context": [
-        {
-          "command": "slidaiv.generateContents",
-          "when": "editorLangId == markdown",
-          "group": "1_modification@99"
-        }
-      ]
     }
   },
   "scripts": {
