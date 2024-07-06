@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
-import { Client } from "./client/openai";
-import { Logger } from "./logger";
-import { SlidevPage } from './model/slidev';
+import { Client } from "@/client/openai";
+import { Logger } from "@/logger";
+import { SlidevPage } from '@/model/slidev';
 
 export class CustomCancellationToken {
     private token: vscode.CancellationToken;
@@ -14,7 +14,7 @@ export class CustomCancellationToken {
 
     onCancellationRequested(listener: () => void): vscode.Disposable {
         return this.token.onCancellationRequested(() => {
-            this.logger.info("User requested to cancel the task.")
+            this.logger.info("User requested to cancel the task.");
             listener();
         });
     }
@@ -39,7 +39,7 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
         const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token, logger), client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
-        logger.info('Write the slide contents')
+        logger.info('Write the slide contents');
         const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
         const edit = new vscode.WorkspaceEdit();
         edit.replace(editor.document.uri, range, page);
@@ -49,8 +49,8 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
         }
 
         progress.report({ increment: 20, message: 'Done' });
-    }
-}
+    };
+};
 
 export const getTaskDecorateContent = (client: Client, logger: Logger) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
@@ -85,5 +85,5 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
         }
 
         progress.report({ increment: 20, message: 'Done' });
-    }
-}
+    };
+};

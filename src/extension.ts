@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
 
-import { ExtensionID } from './constants';
-import { Client } from './client/openai';
-import { Logger } from './logger';
-import { getTaskDecorateContent, getTaskGenerateContents } from './tasks';
+import { ExtensionID } from '@/constants';
+import { Client } from '@/client/openai';
+import { Logger } from '@/logger';
+import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 
 type Configuration = {
 	apiKey: string;
 	baseUrl: string | null;
 	model: string;
 	isDebug: boolean;
-}
+};
 
 const readConfiguration = (): Configuration => {
 	return {
@@ -19,7 +19,7 @@ const readConfiguration = (): Configuration => {
 		model: vscode.workspace.getConfiguration(ExtensionID).get('model') || '',
 		isDebug: vscode.workspace.getConfiguration(ExtensionID).get('debug') || false,
 	};
-}
+};
 
 export function activate(context: vscode.ExtensionContext) {
 	let config = readConfiguration();
@@ -29,7 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 	logger.info('Slidaiv is now active');
 
 	vscode.workspace.onDidChangeConfiguration((e) => {
-		if (!e.affectsConfiguration(ExtensionID)) return; // ignore other changes
+		if (!e.affectsConfiguration(ExtensionID)) {
+			return; // ignore other changes
+		}
 
 		config = readConfiguration();
 		logger.isDebug = config.isDebug;
