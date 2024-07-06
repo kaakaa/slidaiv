@@ -16,7 +16,9 @@ export class Logger {
     }
 
     debug(message: string) {
-        if (!this._isDebug) return;
+        if (!this._isDebug) {
+            return;
+        }
         this.out.appendLine(`[DEBUG] ${message}`);
     }
 
