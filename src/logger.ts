@@ -8,9 +8,14 @@ export class Logger {
         this.isDebug = debug;
     }
 
+    error(message: string) {
+        this.out.appendLine(`[ERROR] ${message}`);
+    }
+
     info(message: string) {
         this.out.appendLine(`[INFO] ${message}`);
     }
+
     debug(message: string) {
         if (!this.isDebug) return;
         this.out.appendLine(`[DEBUG] ${message}`);

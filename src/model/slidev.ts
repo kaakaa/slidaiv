@@ -31,9 +31,9 @@ export class SlidevPage {
         return new SlidevPage(slide);
     }
 
-    async rewriteByLLM(client: LLMClient, model: string) {
+    async rewriteByLLM(client: LLMClient) {
         const prompt = this.prompts.map((prompt: string) => `- ${prompt}`).join('\n');
-        const content = await client.generatePageContents(prompt, model, this.locale);
+        const content = await client.generatePageContents(prompt, this.locale);
         return `${obj2frontmatter(this.frontmatter)}\n\n${content}\n\n`;
     }
 
