@@ -1,8 +1,8 @@
 import OpenAI from 'openai';
-import { getDecorateContentsPrompt, getGenerateContentsPrompt } from './prompts';
-import { getLocaleName } from '../utils';
-import { CustomCancellationToken } from '../tasks';
-import { LLMClient } from './llmClient';
+import { getDecorateContentsPrompt, getGenerateContentsPrompt } from '@/client/prompts';
+import { getLocaleName } from '@/utils';
+import { CustomCancellationToken } from '@/tasks';
+import { LLMClient } from '@/client/llmClient';
 
 export class Client implements LLMClient {
     private client: OpenAI;

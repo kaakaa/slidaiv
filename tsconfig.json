@@ -7,6 +7,7 @@
 		"baseUrl": ".",
 		"skipLibCheck": true,
 		"paths": {
+			"@/*": ["src/*"],
 			"@slidev/parser": ["slidev/packages/parser/src/index.ts"],
 			"@slidev/types": ["slidev/packages/types/src/index.ts"],
 		},

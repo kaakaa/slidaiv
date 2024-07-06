@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
-import { Client } from "./client/openai";
-import { Logger } from "./logger";
-import { SlidevPage } from './model/slidev';
+import { Client } from "@/client/openai";
+import { Logger } from "@/logger";
+import { SlidevPage } from '@/model/slidev';
 
 export class CustomCancellationToken {
     private token: vscode.CancellationToken;

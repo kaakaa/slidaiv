@@ -25,6 +25,7 @@ const extensionConfig = {
   },
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, 'src'),
       '@slidev/parser': path.resolve(__dirname, './slidev/packages/parser/src/index'),
       '@slidev/types': path.resolve(__dirname, './slidev/packages/types/src/index'),
     },

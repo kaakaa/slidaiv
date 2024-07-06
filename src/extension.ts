@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 
-import { ExtensionID } from './constants';
-import { Client } from './client/openai';
-import { Logger } from './logger';
-import { getTaskDecorateContent, getTaskGenerateContents } from './tasks';
+import { ExtensionID } from '@/constants';
+import { Client } from '@/client/openai';
+import { Logger } from '@/logger';
+import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 
 type Configuration = {
 	apiKey: string;
