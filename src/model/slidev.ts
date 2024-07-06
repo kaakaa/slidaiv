@@ -1,6 +1,8 @@
 import { parse } from "@slidev/parser";
 import { SourceSlideInfo } from "@slidev/types";
 import { obj2frontmatter } from "../utils";
+import { CustomCancellationToken } from "../tasks";
+import { LLMClient } from "../client/llmClient";
 
 export class SlidevPage {
     private _start: number;
@@ -31,9 +33,9 @@ export class SlidevPage {
         return new SlidevPage(slide);
     }
 
-    async rewriteByLLM(client: LLMClient) {
+    async rewriteByLLM(token: CustomCancellationToken, client: LLMClient) {
         const prompt = this.prompts.map((prompt: string) => `- ${prompt}`).join('\n');
-        const content = await client.generatePageContents(prompt, this.locale);
+        const content = await client.generatePageContents(token, prompt, this.locale);
         return `${obj2frontmatter(this.frontmatter)}\n\n${content}\n\n`;
     }
 

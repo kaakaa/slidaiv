@@ -1,4 +1,6 @@
-interface LLMClient {
-    generatePageContents(prompt: string, locale: string | null): Promise<string | null>;
-    decorateContents(prompt: string): Promise<string | null>;
+import { CustomCancellationToken } from "../tasks";
+
+export interface LLMClient {
+    generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null>;
+    decorateContents(token: CustomCancellationToken, prompt: string): Promise<string | null>;
 }

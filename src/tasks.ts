@@ -4,8 +4,24 @@ import { Client } from "./client/openai";
 import { Logger } from "./logger";
 import { SlidevPage } from './model/slidev';
 
+export class CustomCancellationToken {
+    private token: vscode.CancellationToken;
+    private readonly logger: Logger;
+    constructor(token: vscode.CancellationToken, logger: Logger) {
+        this.token = token;
+        this.logger = logger;
+    }
+
+    onCancellationRequested(listener: () => void): vscode.Disposable {
+        return this.token.onCancellationRequested(() => {
+            this.logger.info("User requested to cancel the task.")
+            listener();
+        });
+    }
+}
+
 export const getTaskGenerateContents = (client: Client, logger: Logger) => {
-    return async (progress: vscode.Progress<any>) => {
+    return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         logger.info('Generating contents');
         progress.report({ increment: 0, message: 'Parsing Slidev contents' });
         const editor = vscode.window.activeTextEditor;
@@ -22,7 +38,7 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
         progress.report({ increment: 10, message: 'Generating Slidev contents' });
         logger.info(`Call LLM to generate the contents.`);
         logger.debug(`{baseURL: ${client.baseURL}, model: ${client.llmModel}}`);
-        const page = await slidevPage.rewriteByLLM(client);
+        const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token, logger), client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
         logger.info('Write the slide contents')
@@ -39,7 +55,7 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
 }
 
 export const getTaskDecorateContent = (client: Client, logger: Logger) => {
-    return async (progress: vscode.Progress<any>) => {
+    return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         logger.info('Decorating contents');
         progress.report({ increment: 0, message: 'Get text to decorate' });
         const editor = vscode.window.activeTextEditor;
@@ -57,7 +73,7 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
 
         progress.report({ increment: 10, message: 'Calling LLM...' });
         logger.info('Call LLM to decorate the contents');
-        const decorated = await client.decorateContents(highlighted);
+        const decorated = await client.decorateContents(new CustomCancellationToken(token, logger), highlighted);
         logger.debug(`decorated: \n${decorated}`);
         if (!decorated) {
             throw new Error('Failed to decorate the contents');
