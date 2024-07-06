@@ -41,10 +41,12 @@
       ],
       "slidaiv.submenu": [
         {
-          "command": "slidaiv.generateContents"
+          "command": "slidaiv.generateContents",
+          "group": "slidaiv@1"
         },
         {
-          "command": "slidaiv.decorateContents"
+          "command": "slidaiv.decorateContents",
+          "group": "slidaiv@2"
         }
       ]
     },
