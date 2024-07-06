@@ -23,7 +23,6 @@ export class CustomCancellationToken {
 export const getTaskGenerateContents = (client: Client, logger: Logger) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         logger.info('Generating contents');
-        progress.report({ increment: 0, message: 'Parsing Slidev contents' });
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             throw new Error('No active editor');
@@ -35,7 +34,6 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
             position.line
         );
 
-        progress.report({ increment: 10, message: 'Generating Slidev contents' });
         logger.info(`Call LLM to generate the contents.`);
         logger.debug(`{baseURL: ${client.baseURL}, model: ${client.llmModel}}`);
         const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token, logger), client);
@@ -50,14 +48,13 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
             throw new Error('Failed to write the generated slide contents');
         }
 
-        progress.report({ increment: 10, message: 'Done' });
+        progress.report({ increment: 20, message: 'Done' });
     }
 }
 
 export const getTaskDecorateContent = (client: Client, logger: Logger) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         logger.info('Decorating contents');
-        progress.report({ increment: 0, message: 'Get text to decorate' });
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage('No active editor');
@@ -71,7 +68,6 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
         const highlighted = editor.document.getText(selection);
         logger.debug(`selection: \n${highlighted}`);
 
-        progress.report({ increment: 10, message: 'Calling LLM...' });
         logger.info('Call LLM to decorate the contents');
         const decorated = await client.decorateContents(new CustomCancellationToken(token, logger), highlighted);
         logger.debug(`decorated: \n${decorated}`);
@@ -88,6 +84,6 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
             throw new Error('Failed to replace the slide contents');
         }
 
-        progress.report({ increment: 10, message: 'Done' });
+        progress.report({ increment: 20, message: 'Done' });
     }
 }
