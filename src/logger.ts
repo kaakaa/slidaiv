@@ -2,10 +2,9 @@ import type * as vscode from 'vscode';
 
 export class Logger {
     private readonly out: vscode.OutputChannel;
-    private isDebug: boolean;
-    constructor(out: vscode.OutputChannel, debug: boolean) {
+    private _isDebug: boolean = false;
+    constructor(out: vscode.OutputChannel) {
         this.out = out;
-        this.isDebug = debug;
     }
 
     error(message: string) {
@@ -17,7 +16,11 @@ export class Logger {
     }
 
     debug(message: string) {
-        if (!this.isDebug) return;
+        if (!this._isDebug) return;
         this.out.appendLine(`[DEBUG] ${message}`);
     }
+
+    set isDebug(debug: boolean) {
+        this._isDebug = debug;
+    } 
 }
