@@ -20,9 +20,12 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
         );
 
         progress.report({ increment: 10, message: 'Generating Slidev contents' });
+        logger.info(`Call LLM to generate the contents.`);
+        logger.debug(`{baseURL: ${client.baseURL}, model: ${client.llmModel}}`);
         const page = await slidevPage.rewriteByLLM(client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
+        logger.info('Write the slide contents')
         const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
         const edit = new vscode.WorkspaceEdit();
         edit.replace(editor.document.uri, range, page);
