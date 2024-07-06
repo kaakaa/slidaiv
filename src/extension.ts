@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const baseUrl: string | null = vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null;
 	const llmModel: string = vscode.workspace.getConfiguration(ExtensionID).get('model') || '';
 	const client = new Client(apiKey, baseUrl, llmModel, vscode.env.language);
-	logger.info(`#{baseUrl: ${baseUrl}, model: ${llmModel}, locale: ${vscode.env.language}`)
+	logger.info(`#{baseUrl: ${baseUrl}, model: ${llmModel}, locale: ${vscode.env.language}`);
 
 
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.generateContents', async () => {
@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}, getTaskGenerateContents(client, logger));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to generate content: ${e.message}`);
-			logger.error(`failed to generate content: ${e.message}`)
+			logger.error(`failed to generate content: ${e.message}`);
 		}
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.decorateContents', async () => {
@@ -39,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}, getTaskDecorateContent(client, logger));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to decorate content: ${e.message}`);
+			logger.error(`failed to decorate content: ${e.message}`);
 		}
 	}));
 }
