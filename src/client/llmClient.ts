@@ -1,3 +1,4 @@
 interface LLMClient {
-    generatePageContents(prompt: string, model: string, locale: string | null): Promise<string | null>;
+    generatePageContents(prompt: string, locale: string | null): Promise<string | null>;
+    decorateContents(prompt: string): Promise<string | null>;
 }

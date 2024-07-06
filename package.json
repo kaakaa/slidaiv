@@ -19,6 +19,10 @@
       {
         "command": "slidaiv.generateContents",
         "title": "Generate Slidev contents"
+      },
+      {
+        "command": "slidaiv.decorateContents",
+        "title": "Decorate contents (Experimental)"
       }
     ],
     "submenus": [
@@ -38,6 +42,9 @@
       "slidaiv.submenu": [
         {
           "command": "slidaiv.generateContents"
+        },
+        {
+          "command": "slidaiv.decorateContents"
         }
       ]
     },
