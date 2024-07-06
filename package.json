@@ -19,8 +19,37 @@
       {
         "command": "slidaiv.generateContents",
         "title": "Generate Slidev contents"
+      },
+      {
+        "command": "slidaiv.decorateContents",
+        "title": "Decorate contents (Experimental)"
       }
     ],
+    "submenus": [
+      {
+        "id": "slidaiv.submenu",
+        "label": "Slidaiv"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "slidaiv.submenu",
+          "when": "editorLangId == markdown",
+          "group": "1_modification@99"
+        }
+      ],
+      "slidaiv.submenu": [
+        {
+          "command": "slidaiv.generateContents",
+          "group": "slidaiv@1"
+        },
+        {
+          "command": "slidaiv.decorateContents",
+          "group": "slidaiv@2"
+        }
+      ]
+    },
     "configuration": {
       "title": "Slidaiv",
       "properties": {
@@ -43,15 +72,6 @@
           "description": "Model name"
         }
       }
-    },
-    "menus": {
-      "editor/context": [
-        {
-          "command": "slidaiv.generateContents",
-          "when": "editorLangId == markdown",
-          "group": "1_modification@99"
-        }
-      ]
     }
   },
   "scripts": {
