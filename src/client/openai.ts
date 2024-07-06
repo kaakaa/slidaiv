@@ -1,36 +1,50 @@
 import OpenAI from 'openai';
 import { getDecorateContentsPrompt, getGenerateContentsPrompt } from './prompts';
 import { getLocaleName } from '../utils';
+import { CustomCancellationToken } from '../tasks';
+import { LLMClient } from './llmClient';
 
-export class Client implements LLMClient  {
+export class Client implements LLMClient {
     private client: OpenAI;
     private _llmModel: string;
     private defaultLocale: string;
 
-    constructor(apiKey:string, baseURL:string|null, llmModel: string, locale: string) {
+    constructor(apiKey: string, baseURL: string | null, llmModel: string, locale: string) {
         baseURL = baseURL || 'https://api.openai.com/v1';
-        this.client = new OpenAI({apiKey, baseURL});
+        this.client = new OpenAI({ apiKey, baseURL });
         this._llmModel = llmModel;
         this.defaultLocale = locale;
     }
 
-    async generatePageContents(prompt: string, locale: string | null): Promise<string | null> {
+    async generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null> {
+        const ac = new AbortController();
+        token.onCancellationRequested(() => {
+            ac.abort();
+        });
+
         const loc = getLocaleName(locale || this.defaultLocale);
         const sysPrompt = getGenerateContentsPrompt(loc);
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
-		    messages: [{
-			    "content": prompt,
-		    	"role": "user",
+            messages: [{
+                "content": prompt,
+                "role": "user",
             }, {
                 "content": sysPrompt,
                 "role": "system",
             }],
+        }, {
+            signal: ac.signal,
         });
         return resp.choices[0].message.content;
     }
 
-    async decorateContents(prompt: string): Promise<string | null> {
+    async decorateContents(token: CustomCancellationToken, prompt: string): Promise<string | null> {
+        const ac = new AbortController();
+        token.onCancellationRequested(() => {
+            ac.abort();
+        });
+
         const sysPrompt = getDecorateContentsPrompt();
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
@@ -41,6 +55,8 @@ export class Client implements LLMClient  {
                 "content": sysPrompt,
                 "role": "system"
             }],
+        }, {
+            signal: ac.signal,
         });
         return resp.choices[0].message.content;
     }
@@ -53,4 +69,3 @@ export class Client implements LLMClient  {
         return this.client.baseURL;
     }
 }
-

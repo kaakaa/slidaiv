@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 			await vscode.window.withProgress({
 				location: vscode.ProgressLocation.Notification,
 				title: 'Generating Slidev contents',
-				cancellable: false
+				cancellable: true
 			}, getTaskGenerateContents(client, logger));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to generate content: ${e.message}`);
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 			await vscode.window.withProgress({
 				location: vscode.ProgressLocation.Notification,
 				title: 'Decorating Slidev contents',
-				cancellable: false
+				cancellable: true
 			}, getTaskDecorateContent(client, logger));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to decorate content: ${e.message}`);
