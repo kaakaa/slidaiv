@@ -2,10 +2,10 @@ changelog:
   categories:
     - title: Enhancements
       labels:
-        - enhancement
+        - type:enhancement
     - title: Bug Fixes
       labels:
-        - bug
+        - type:bug
     - title: Other Changes
       labels:
         - "*"
