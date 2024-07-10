@@ -47,13 +47,10 @@ export class Client implements LLMClient {
 
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
-            messages: [{
-                "content": prompt,
-                "role": "user",
-            }, {
-                "content": sysPrompt,
-                "role": "system",
-            }],
+            messages: [
+                { "role": "system", "content": sysPrompt },
+                { "role": "user", "content": prompt }
+            ],
         }, {
             signal: ac.signal,
         });
@@ -82,13 +79,10 @@ export class Client implements LLMClient {
 
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
-            messages: [{
-                "content": prompt,
-                "role": "user",
-            }, {
-                "content": sysPrompt,
-                "role": "system"
-            }],
+            messages: [
+                { "role": "system", "content": sysPrompt },
+                { "role": "user", "content": prompt }
+            ],
         }, {
             signal: ac.signal,
         });
