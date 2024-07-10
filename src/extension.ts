@@ -54,12 +54,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	vscode.commands.registerCommand('slidaiv.command.setApiKey', async () => {
+		const old: string = await SecretApiKeyStore.instance.get() ?? '';
 		const input: string = await vscode.window.showInputBox({
 			placeHolder: 'Input your OpenAI API Key',
 			password: true,
 		}) ?? '';
-		// TODO: Refresh client
-		SecretApiKeyStore.instance.store(input);
+
+		if (old !== input) {
+			SecretApiKeyStore.instance.store(input);
+			// TODO: refactor.
+			config = await readConfiguration();
+			client = new Client(config, vscode.env.language, logger);
+			logger.debug('API Key is updated.');
+		}
 	})
 }
 
