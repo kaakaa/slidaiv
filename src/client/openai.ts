@@ -1,8 +1,8 @@
 import OpenAI from 'openai';
 import {
     evalPromptLiteral,
-    getDecorateContentsPrompt,
-    getGenerateContentsPrompt,
+    getDefaultPromptDecorateContents,
+    getDefaultPromptForGenerateContents,
 } from '@/client/prompts';
 import { getLocaleName } from '@/utils';
 import { CustomCancellationToken } from '@/tasks';
@@ -39,7 +39,7 @@ export class Client implements LLMClient {
             sysPrompt = evalPromptLiteral(this.promptGenerate, { locale: loc });
         } else {
             this.logger.info("Default prompt is used, because custom prompt is not set.")
-            sysPrompt = getGenerateContentsPrompt(loc);
+            sysPrompt = getDefaultPromptForGenerateContents(loc);
         }
 
         this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
@@ -71,7 +71,7 @@ export class Client implements LLMClient {
             sysPrompt = evalPromptLiteral(this.promptDecorate, {});
         } else {
             this.logger.info("Default prompt is used, because custom prompt is not set.")
-            sysPrompt = getDecorateContentsPrompt();
+            sysPrompt = getDefaultPromptDecorateContents();
         }
 
         this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}`);

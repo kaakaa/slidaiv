@@ -1,4 +1,4 @@
-export function getGenerateContentsPrompt(locale: string) {
+export function getDefaultPromptForGenerateContents(locale: string) {
     return `
         You are an expert in creating Slidev format Markdown slides. Based on the user's instructions, please create a Markdown text that represents one page of a slide.
 
@@ -18,7 +18,7 @@ export function getGenerateContentsPrompt(locale: string) {
     `;
 }
 
-export function getDecorateContentsPrompt() {
+export function getDefaultPromptDecorateContents() {
     return `
         You are a Slidev Markdown decorator using Tailwind CSS and UnoCSS. Your task is to process the input Markdown and return ONLY the decorated input text. Follow these rules:
 
