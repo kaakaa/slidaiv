@@ -38,7 +38,7 @@ export class Client implements LLMClient {
         if (this.promptGenerate && this.promptGenerate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptGenerate, { locale: loc });
         } else {
-            this.logger.info("Default prompt is used, because custom prompt is not set.")
+            this.logger.info("Default prompt is used, because custom prompt is not set.");
             sysPrompt = getDefaultPromptForGenerateContents(loc);
         }
 
@@ -70,7 +70,7 @@ export class Client implements LLMClient {
         if (this.promptDecorate && this.promptDecorate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptDecorate, {});
         } else {
-            this.logger.info("Default prompt is used, because custom prompt is not set.")
+            this.logger.info("Default prompt is used, because custom prompt is not set.");
             sysPrompt = getDefaultPromptDecorateContents();
         }
 
