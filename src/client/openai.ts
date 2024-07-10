@@ -64,8 +64,6 @@ export class Client implements LLMClient {
             ac.abort();
         });
 
-        Logger.info('key:' + this.client.apiKey);
-
         let sysPrompt;
         if (this.promptDecorate && this.promptDecorate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptDecorate, {});
