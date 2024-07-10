@@ -1,19 +1,30 @@
 import OpenAI from 'openai';
-import { getDecorateContentsPrompt, getGenerateContentsPrompt } from '@/client/prompts';
+import {
+    evalPromptLiteral,
+    getDefaultPromptDecorateContents,
+    getDefaultPromptForGenerateContents,
+} from '@/client/prompts';
 import { getLocaleName } from '@/utils';
 import { CustomCancellationToken } from '@/tasks';
 import { LLMClient } from '@/client/llmClient';
+import type { Configuration } from '@/model/config';
+import { Logger } from '@/logger';
 
 export class Client implements LLMClient {
     private client: OpenAI;
     private _llmModel: string;
+    private promptGenerate: string;
+    private promptDecorate: string;
     private defaultLocale: string;
+    private logger: Logger;
 
-    constructor(apiKey: string, baseURL: string | null, llmModel: string, locale: string) {
-        baseURL = baseURL || 'https://api.openai.com/v1';
-        this.client = new OpenAI({ apiKey, baseURL });
-        this._llmModel = llmModel;
+    constructor(config: Configuration, locale: string, logger: Logger) {
+        this.client = new OpenAI({ apiKey: config.apiKey, baseURL: config.baseUrl });
+        this._llmModel = config.model;
         this.defaultLocale = locale;
+        this.promptGenerate = config.promptGenerate;
+        this.promptDecorate = config.promptDecorate;
+        this.logger = logger;
     }
 
     async generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null> {
@@ -23,20 +34,30 @@ export class Client implements LLMClient {
         });
 
         const loc = getLocaleName(locale || this.defaultLocale);
-        const sysPrompt = getGenerateContentsPrompt(loc);
+        let sysPrompt;
+        if (this.promptGenerate && this.promptGenerate.length > 0) {
+            sysPrompt = evalPromptLiteral(this.promptGenerate, { locale: loc });
+        } else {
+            this.logger.info("Default prompt is used, because custom prompt is not set.")
+            sysPrompt = getDefaultPromptForGenerateContents(loc);
+        }
+
+        this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
+        this.logger.debug(`sysPrompt=${sysPrompt}`);
+
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
-            messages: [{
-                "content": prompt,
-                "role": "user",
-            }, {
-                "content": sysPrompt,
-                "role": "system",
-            }],
+            messages: [
+                { "role": "system", "content": sysPrompt },
+                { "role": "user", "content": prompt }
+            ],
         }, {
             signal: ac.signal,
         });
-        return resp.choices[0].message.content;
+
+        const ret = resp?.choices[0]?.message?.content;
+        this.logger.debug(`Response from OpenAI: ${ret}`);
+        return ret;
     }
 
     async decorateContents(token: CustomCancellationToken, prompt: string): Promise<string | null> {
@@ -45,20 +66,30 @@ export class Client implements LLMClient {
             ac.abort();
         });
 
-        const sysPrompt = getDecorateContentsPrompt();
+        let sysPrompt;
+        if (this.promptDecorate && this.promptDecorate.length > 0) {
+            sysPrompt = evalPromptLiteral(this.promptDecorate, {});
+        } else {
+            this.logger.info("Default prompt is used, because custom prompt is not set.")
+            sysPrompt = getDefaultPromptDecorateContents();
+        }
+
+        this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}`);
+        this.logger.debug(`sysPrompt=${sysPrompt}`);
+
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
-            messages: [{
-                "content": prompt,
-                "role": "user",
-            }, {
-                "content": sysPrompt,
-                "role": "system"
-            }],
+            messages: [
+                { "role": "system", "content": sysPrompt },
+                { "role": "user", "content": prompt }
+            ],
         }, {
             signal: ac.signal,
         });
-        return resp.choices[0].message.content;
+
+        const ret = resp?.choices[0]?.message?.content;
+        this.logger.debug(`Response from OpenAI: ${ret}`);
+        return ret;
     }
 
     get llmModel(): string {

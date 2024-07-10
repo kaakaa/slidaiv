@@ -56,25 +56,34 @@
         "slidaiv.apiKey": {
           "type": "string",
           "default": "",
-          "description": "OpenAI API Key"
+          "description": "Specify OpenAI API Key"
         },
         "slidaiv.baseUrl": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": "string",
           "default": "https://api.openai.com/v1",
-          "description": "OpenAI Base URL (default: https://api.openai.com/v1). Enter this if you use OpenAI Compatible API."
+          "description": "Specify OpenAI API Base URL (default: https://api.openai.com/v1). Enter this if you use OpenAI Compatible API."
         },
         "slidaiv.model": {
           "type": "string",
           "default": "gpt-3.5-turbo",
-          "description": "Model name"
+          "description": "Specify the model to use. (default: gpt-3.5-turbo)"
+        },
+        "slidaiv.prompt.generate": {
+          "type": "string",
+          "editPresentation": "multilineText",
+          "default": "",
+          "markdownDescription": "System Prompt for `Generate Slidev contents` command.  \nYou can use variable `${locale}` in your prompt, which will be replaced with locale setting in runtime.\n\nIf empty, [the default prompt](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts#) will be used. (Default is empty)"
+        },
+        "slidaiv.prompt.decorate": {
+          "type": "string",
+          "editPresentation": "multilineText",
+          "default": "",
+          "markdownDescription": "System Prompt for `Decorate contents (Experimental)` command.\n\nIf empty, [the default prompt](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) will be used. (Default is empty)"
         },
         "slidaiv.debug": {
           "type": "boolean",
           "default": false,
-          "description": "Debug mode"
+          "description": "Enable to output debug logs."
         }
       }
     }

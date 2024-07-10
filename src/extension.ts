@@ -4,27 +4,14 @@ import { ExtensionID } from '@/constants';
 import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
 import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
-
-type Configuration = {
-	apiKey: string;
-	baseUrl: string | null;
-	model: string;
-	isDebug: boolean;
-};
-
-const readConfiguration = (): Configuration => {
-	return {
-		apiKey: vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '',
-		baseUrl: vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null,
-		model: vscode.workspace.getConfiguration(ExtensionID).get('model') || '',
-		isDebug: vscode.workspace.getConfiguration(ExtensionID).get('debug') || false,
-	};
-};
+import { readConfiguration } from '@/model/config';
 
 export function activate(context: vscode.ExtensionContext) {
 	let config = readConfiguration();
+
 	const logger = new Logger(vscode.window.createOutputChannel('Slidaiv'));
-	let client = new Client(config.apiKey, config.baseUrl, config.model, vscode.env.language);
+	logger.isDebug = config.isDebug;
+	let client = new Client(config, vscode.env.language, logger);
 
 	logger.info('Slidaiv is now active');
 
@@ -35,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		config = readConfiguration();
 		logger.isDebug = config.isDebug;
-		client = new Client(config.apiKey, config.baseUrl, config.model, vscode.env.language);
+		client = new Client(config, vscode.env.language, logger);
 	});
 
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.generateContents', async () => {
