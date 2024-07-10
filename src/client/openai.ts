@@ -15,15 +15,13 @@ export class Client {
     private promptGenerate: string;
     private promptDecorate: string;
     private defaultLocale: string;
-    private logger: Logger;
 
-    constructor(config: Configuration, locale: string, logger: Logger) {
+    constructor(config: Configuration, locale: string) {
         this.client = new OpenAI({ apiKey: config.apiKey, baseURL: config.baseUrl });
         this._llmModel = config.model;
         this.defaultLocale = locale;
         this.promptGenerate = config.promptGenerate;
         this.promptDecorate = config.promptDecorate;
-        this.logger = logger;
     }
 
     async generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null> {
@@ -37,12 +35,12 @@ export class Client {
         if (this.promptGenerate && this.promptGenerate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptGenerate, { locale: loc });
         } else {
-            this.logger.info("Default prompt is used, because custom prompt is not set.");
+            Logger.info("Default prompt is used, because custom prompt is not set.");
             sysPrompt = getDefaultPromptForGenerateContents(loc);
         }
 
-        this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
-        this.logger.debug(`sysPrompt=${sysPrompt}`);
+        Logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
+        Logger.debug(`sysPrompt=${sysPrompt}`);
 
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
@@ -55,7 +53,7 @@ export class Client {
         });
 
         const ret = resp?.choices[0]?.message?.content;
-        this.logger.debug(`Response from OpenAI: ${ret}`);
+        Logger.debug(`Response from OpenAI: ${ret}`);
         return ret;
     }
 
@@ -65,18 +63,18 @@ export class Client {
             ac.abort();
         });
 
-        this.logger.info('key:' + this.client.apiKey);
+        Logger.info('key:' + this.client.apiKey);
 
         let sysPrompt;
         if (this.promptDecorate && this.promptDecorate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptDecorate, {});
         } else {
-            this.logger.info("Default prompt is used, because custom prompt is not set.");
+            Logger.info("Default prompt is used, because custom prompt is not set.");
             sysPrompt = getDefaultPromptDecorateContents();
         }
 
-        this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}`);
-        this.logger.debug(`sysPrompt=${sysPrompt}`);
+        Logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}`);
+        Logger.debug(`sysPrompt=${sysPrompt}`);
 
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
@@ -89,7 +87,7 @@ export class Client {
         });
 
         const ret = resp?.choices[0]?.message?.content;
-        this.logger.debug(`Response from OpenAI: ${ret}`);
+        Logger.debug(`Response from OpenAI: ${ret}`);
         return ret;
     }
 

@@ -15,9 +15,7 @@ export class SecretTokenStore {
     }
 
     async store(token: string): Promise<void> {
-        if (token) {
-            await this.storage.store(this.TOKEN_KEY, token);
-        }
+        return await this.storage.store(this.TOKEN_KEY, token);
     }
 
     async get(): Promise<string | undefined> {

@@ -1,28 +1,31 @@
 import type * as vscode from 'vscode';
 
 export class Logger {
-    private readonly out: vscode.OutputChannel;
+    private static _instance: Logger;
     private _isDebug: boolean = false;
-    constructor(out: vscode.OutputChannel) {
-        this.out = out;
+
+    private constructor(private out: vscode.OutputChannel) {}
+
+    static init(out: vscode.OutputChannel): void {
+        Logger._instance = new Logger(out);
     }
 
-    error(message: string) {
-        this.out.appendLine(`[ERROR] ${message}`);
+    static error(message: string) {
+        Logger._instance.out.appendLine(`[ERROR] ${message}`);
     }
 
-    info(message: string) {
-        this.out.appendLine(`[INFO] ${message}`);
+    static info(message: string) {
+        Logger._instance.out.appendLine(`[INFO] ${message}`);
     }
 
-    debug(message: string) {
-        if (!this._isDebug) {
+    static debug(message: string) {
+        if (!Logger._instance._isDebug) {
             return;
         }
-        this.out.appendLine(`[DEBUG] ${message}`);
+        Logger._instance.out.appendLine(`[DEBUG] ${message}`);
     }
 
-    set isDebug(debug: boolean) {
-        this._isDebug = debug;
+    static set isDebug(debug: boolean) {
+        Logger._instance._isDebug = debug;
     } 
 }

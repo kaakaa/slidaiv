@@ -14,10 +14,10 @@ export type Configuration = {
 
 
 export async function readConfiguration(): Promise<Configuration> {
-    const apiKey = await SecretTokenStore.instance.get() ?? '';
+    const apiKey = await SecretTokenStore.instance.get();
     const ws = vscode.workspace;
     return {
-        apiKey: apiKey,
+        apiKey: apiKey ?? '',
         baseUrl: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyApiBaseURL) ?? '',
         model: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyLLMModel) ?? '',
         promptGenerate: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyPromptGenerate) ?? '',

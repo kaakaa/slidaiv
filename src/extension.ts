@@ -7,32 +7,38 @@ import { Logger } from '@/logger';
 import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 import { readConfiguration } from '@/model/config';
 
+async function initialize() {
+	const config = await readConfiguration();
+	Logger.isDebug = config.isDebug;
+	const client = new Client(config, vscode.env.language);
+	return { config, client };
+}
+
 export async function activate(context: vscode.ExtensionContext) {
-	SecretApiKeyStore.init(context);
-	const apiKey = SecretApiKeyStore.instance.get();
+	Logger.init(vscode.window.createOutputChannel('Slidaiv'));
+	await SecretApiKeyStore.init(context);
+	const apiKey = await SecretApiKeyStore.instance.get();
 	if (!apiKey) {
-		const sel = await vscode.window.showInformationMessage('OpenAI API Key is not set. Please set it from the command palette.', 'Set API Key');
+		const sel = await vscode.window.showInformationMessage(
+			'OpenAI API Key is not set. Please set it from the command palette.',
+			'Set API Key'
+		)
 		if (sel === 'Set API Key') {
 			vscode.commands.executeCommand('slidaiv.command.setApiKey');
 		}
 	}
-	// TODO: Check if api key is set. if not, show a warning message.
-	let config = await readConfiguration();
 
-	const logger = new Logger(vscode.window.createOutputChannel('Slidaiv'));
-	logger.isDebug = config.isDebug;
-	let client = new Client(config, vscode.env.language, logger);
+	let { config, client } = await initialize();
+	Logger.isDebug = config.isDebug;
 
-	logger.info('Slidaiv is now active');
+	Logger.info('Slidaiv is now active');
 
 	vscode.workspace.onDidChangeConfiguration(async (e) => {
 		if (!e.affectsConfiguration(ExtensionID)) {
 			return; // ignore other changes
 		}
-
-		config = await readConfiguration();
-		logger.isDebug = config.isDebug;
-		client = new Client(config, vscode.env.language, logger);
+		const updated = await initialize();
+		client = updated.client;
 	});
 
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.generateContents', async () => {
@@ -41,10 +47,10 @@ export async function activate(context: vscode.ExtensionContext) {
 				location: vscode.ProgressLocation.Notification,
 				title: 'Generating Slidev contents',
 				cancellable: true
-			}, getTaskGenerateContents(client, logger));
+			}, getTaskGenerateContents(client));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to generate content: ${e.message}`);
-			logger.error(`failed to generate content: ${e.message}`);
+			Logger.error(`failed to generate content: ${e.message}`);
 		}
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.decorateContents', async () => {
@@ -53,34 +59,35 @@ export async function activate(context: vscode.ExtensionContext) {
 				location: vscode.ProgressLocation.Notification,
 				title: 'Decorating Slidev contents',
 				cancellable: true
-			}, getTaskDecorateContent(client, logger));
+			}, getTaskDecorateContent(client));
 		} catch (e: any) {
 			vscode.window.showErrorMessage(`failed to decorate content: ${e.message}`);
-			logger.error(`failed to decorate content: ${e.message}`);
+			Logger.error(`failed to decorate content: ${e.message}`);
 		}
 	}));
 
 	vscode.commands.registerCommand('slidaiv.command.setApiKey', async () => {
-		const old: string = await SecretApiKeyStore.instance.get() ?? '';
 		const input: string = await vscode.window.showInputBox({
 			placeHolder: 'Input your OpenAI API Key',
 			password: true,
 		}) ?? '';
 
-		if (old !== input) {
-			SecretApiKeyStore.instance.store(input);
-			// TODO: refactor.
-			config = await readConfiguration();
-			client = new Client(config, vscode.env.language, logger);
-			logger.debug('API Key is updated.');
-		}
+		await SecretApiKeyStore.instance.store(input);
+		const updated = await initialize();
+		client = updated.client;
+		vscode.window.showInformationMessage("API Key is updated.")
 	});
 
 	vscode.commands.registerCommand('slidaiv.command.deleteApiKey', async () => {
+		const key = await SecretApiKeyStore.instance.get()
+		if (!key) {
+			vscode.window.showWarningMessage("API Key is not set.")
+			return;
+		}
 		await SecretApiKeyStore.instance.refresh();
-		config = await readConfiguration();
-		client = new Client(config, vscode.env.language, logger);
-		logger.debug('API Key is deleted.');
+		const updated = await initialize();
+		client = updated.client;
+		vscode.window.showInformationMessage("API Key is deleted.")
 	});
 }
 
