@@ -4,22 +4,7 @@ import { ExtensionID } from '@/constants';
 import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
 import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
-
-type Configuration = {
-	apiKey: string;
-	baseUrl: string | null;
-	model: string;
-	isDebug: boolean;
-};
-
-const readConfiguration = (): Configuration => {
-	return {
-		apiKey: vscode.workspace.getConfiguration(ExtensionID).get('apiKey') || '',
-		baseUrl: vscode.workspace.getConfiguration(ExtensionID).get('baseUrl') || null,
-		model: vscode.workspace.getConfiguration(ExtensionID).get('model') || '',
-		isDebug: vscode.workspace.getConfiguration(ExtensionID).get('debug') || false,
-	};
-};
+import { readConfiguration } from '@/model/config';
 
 export function activate(context: vscode.ExtensionContext) {
 	let config = readConfiguration();
