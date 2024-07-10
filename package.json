@@ -18,11 +18,13 @@
     "commands": [
       {
         "command": "slidaiv.generateContents",
-        "title": "Generate Slidev contents"
+        "title": "Generate Slidev contents",
+        "category": "Slidaiv"
       },
       {
         "command": "slidaiv.decorateContents",
-        "title": "Decorate contents (Experimental)"
+        "title": "Decorate contents (Experimental)",
+        "category": "Slidaiv"
       }
     ],
     "submenus": [
