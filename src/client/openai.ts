@@ -6,10 +6,11 @@ import {
 } from '@/client/prompts';
 import { getLocaleName } from '@/utils';
 import { CustomCancellationToken } from '@/tasks';
+import { LLMClient } from '@/client/llmClient';
 import type { Configuration } from '@/model/config';
 import { Logger } from '@/logger';
 
-export class Client {
+export class Client implements LLMClient {
     private client: OpenAI;
     private _llmModel: string;
     private promptGenerate: string;
