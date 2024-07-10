@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
-import { Client } from "@/client/openai";
 import { Logger } from "@/logger";
 import { SlidevPage } from '@/model/slidev';
+import { LLMClient } from './client/llmClient';
 
 export class CustomCancellationToken {
     constructor(private readonly token: vscode.CancellationToken) { }
@@ -15,7 +15,7 @@ export class CustomCancellationToken {
     }
 }
 
-export const getTaskGenerateContents = (client: Client) => {
+export const getTaskGenerateContents = (client: LLMClient) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         Logger.info('Generating contents');
         const editor = vscode.window.activeTextEditor;
@@ -46,7 +46,7 @@ export const getTaskGenerateContents = (client: Client) => {
     };
 };
 
-export const getTaskDecorateContent = (client: Client) => {
+export const getTaskDecorateContent = (client: LLMClient) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         Logger.info('Decorating contents');
         const editor = vscode.window.activeTextEditor;
@@ -81,3 +81,17 @@ export const getTaskDecorateContent = (client: Client) => {
         progress.report({ increment: 20, message: 'Done' });
     };
 };
+
+export async function doTaskWithProgress(title: string, task: { (progress: vscode.Progress<any>, token: vscode.CancellationToken): Promise<void> }) {
+    try {
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: title,
+            cancellable: true
+        }, task);
+    } catch (e: any) {
+        vscode.window.showErrorMessage(`failed to task(${title}): ${e.message}`);
+        Logger.error(`failed to task(${title}): ${e.message}`);
+
+    }
+}

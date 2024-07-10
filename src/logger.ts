@@ -7,7 +7,9 @@ export class Logger {
     private constructor(private out: vscode.OutputChannel) {}
 
     static init(out: vscode.OutputChannel): void {
-        Logger._instance = new Logger(out);
+        if (!Logger._instance) {
+            Logger._instance = new Logger(out);
+        }
     }
 
     static error(message: string) {

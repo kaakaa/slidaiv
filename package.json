@@ -60,7 +60,7 @@
         "slidaiv.apiKey": {
           "type": "null",
           "default": null,
-          "markdownDescription": "Set API Key to authorize requests to OpenAI API from [here](command:slidaiv.command.setApiKey), or [refresh api key](command:slidaiv.command.deleteApiKey)."
+          "markdownDescription": "Set API Key to authorize requests to OpenAI API from [here](command:slidaiv.command.setApiKey)."
         },
         "slidaiv.baseUrl": {
           "type": "string",

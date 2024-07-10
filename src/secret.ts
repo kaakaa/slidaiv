@@ -21,8 +21,4 @@ export class SecretTokenStore {
     async get(): Promise<string | undefined> {
         return await this.storage.get(this.TOKEN_KEY);
     }
-
-    async refresh(): Promise<void> {
-        return await this.storage.delete(this.TOKEN_KEY);
-    }
 }
