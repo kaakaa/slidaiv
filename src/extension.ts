@@ -9,6 +9,13 @@ import { readConfiguration } from '@/model/config';
 
 export async function activate(context: vscode.ExtensionContext) {
 	SecretApiKeyStore.init(context);
+	const apiKey = SecretApiKeyStore.instance.get();
+	if (!apiKey) {
+		const sel = await vscode.window.showInformationMessage('OpenAI API Key is not set. Please set it from the command palette.', 'Set API Key');
+		if (sel === 'Set API Key') {
+			vscode.commands.executeCommand('slidaiv.command.setApiKey');
+		}
+	}
 	// TODO: Check if api key is set. if not, show a warning message.
 	let config = await readConfiguration();
 
@@ -67,7 +74,14 @@ export async function activate(context: vscode.ExtensionContext) {
 			client = new Client(config, vscode.env.language, logger);
 			logger.debug('API Key is updated.');
 		}
-	})
+	});
+
+	vscode.commands.registerCommand('slidaiv.command.deleteApiKey', async () => {
+		await SecretApiKeyStore.instance.refresh();
+		config = await readConfiguration();
+		client = new Client(config, vscode.env.language, logger);
+		logger.debug('API Key is deleted.');
+	});
 }
 
 // This method is called when your extension is deactivated
