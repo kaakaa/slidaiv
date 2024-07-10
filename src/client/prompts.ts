@@ -34,5 +34,5 @@ export function getDefaultPromptDecorateContents() {
 }
 
 export function evalPromptLiteral(prompt: string, variables: { [key: string]: string }) {
-    return prompt.replace(/\${(\w+)\}/g, (_, key) => variables[key] || '')
+    return prompt.replace(/\${(\w+)\}/g, (_, key) => variables[key] || '');
 }

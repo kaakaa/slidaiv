@@ -1,28 +1,23 @@
 import * as vscode from 'vscode';
 
-import { Client } from "@/client/openai";
 import { Logger } from "@/logger";
 import { SlidevPage } from '@/model/slidev';
+import { LLMClient } from './client/llmClient';
 
 export class CustomCancellationToken {
-    private token: vscode.CancellationToken;
-    private readonly logger: Logger;
-    constructor(token: vscode.CancellationToken, logger: Logger) {
-        this.token = token;
-        this.logger = logger;
-    }
+    constructor(private readonly token: vscode.CancellationToken) { }
 
     onCancellationRequested(listener: () => void): vscode.Disposable {
         return this.token.onCancellationRequested(() => {
-            this.logger.info("User requested to cancel the task.");
+            Logger.info("User requested to cancel the task.");
             listener();
         });
     }
 }
 
-export const getTaskGenerateContents = (client: Client, logger: Logger) => {
+export const getTaskGenerateContents = (client: LLMClient) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
-        logger.info('Generating contents');
+        Logger.info('Generating contents');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             throw new Error('No active editor');
@@ -34,11 +29,11 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
             position.line
         );
 
-        logger.info(`Call LLM to generate the contents.`);
-        const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token, logger), client);
+        Logger.info(`Call LLM to generate the contents.`);
+        const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token), client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
-        logger.info('Write the slide contents');
+        Logger.info('Write the slide contents');
         const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
         const edit = new vscode.WorkspaceEdit();
         edit.replace(editor.document.uri, range, page);
@@ -51,9 +46,9 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
     };
 };
 
-export const getTaskDecorateContent = (client: Client, logger: Logger) => {
+export const getTaskDecorateContent = (client: LLMClient) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
-        logger.info('Decorating contents');
+        Logger.info('Decorating contents');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage('No active editor');
@@ -65,17 +60,17 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
             return;
         }
         const highlighted = editor.document.getText(selection);
-        logger.debug(`selection: \n${highlighted}`);
+        Logger.debug(`selection: \n${highlighted}`);
 
-        logger.info('Call LLM to decorate the contents');
-        const decorated = await client.decorateContents(new CustomCancellationToken(token, logger), highlighted);
-        logger.debug(`decorated: \n${decorated}`);
+        Logger.info('Call LLM to decorate the contents');
+        const decorated = await client.decorateContents(new CustomCancellationToken(token), highlighted);
+        Logger.debug(`decorated: \n${decorated}`);
         if (!decorated) {
             throw new Error('Failed to decorate the contents');
         }
 
         progress.report({ increment: 80, message: 'Write the decorated text' });
-        logger.info('Write the slide contents');
+        Logger.info('Write the slide contents');
         const edit = new vscode.WorkspaceEdit();
         edit.replace(editor.document.uri, selection, decorated);
         const isEdited = await vscode.workspace.applyEdit(edit);
@@ -86,3 +81,17 @@ export const getTaskDecorateContent = (client: Client, logger: Logger) => {
         progress.report({ increment: 20, message: 'Done' });
     };
 };
+
+export async function doTaskWithProgress(title: string, task: { (progress: vscode.Progress<any>, token: vscode.CancellationToken): Promise<void> }) {
+    try {
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: title,
+            cancellable: true
+        }, task);
+    } catch (e: any) {
+        vscode.window.showErrorMessage(`failed to task(${title}): ${e.message}`);
+        Logger.error(`failed to task(${title}): ${e.message}`);
+
+    }
+}
