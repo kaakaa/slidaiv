@@ -1,13 +1,16 @@
 import * as vscode from 'vscode';
 
 import { ExtensionID } from '@/constants';
+import { SecretTokenStore as SecretApiKeyStore } from '@/secret';
 import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
 import { getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 import { readConfiguration } from '@/model/config';
 
-export function activate(context: vscode.ExtensionContext) {
-	let config = readConfiguration();
+export async function activate(context: vscode.ExtensionContext) {
+	SecretApiKeyStore.init(context);
+	// TODO: Check if api key is set. if not, show a warning message.
+	let config = await readConfiguration();
 
 	const logger = new Logger(vscode.window.createOutputChannel('Slidaiv'));
 	logger.isDebug = config.isDebug;
@@ -15,12 +18,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	logger.info('Slidaiv is now active');
 
-	vscode.workspace.onDidChangeConfiguration((e) => {
+	vscode.workspace.onDidChangeConfiguration(async (e) => {
 		if (!e.affectsConfiguration(ExtensionID)) {
 			return; // ignore other changes
 		}
 
-		config = readConfiguration();
+		config = await readConfiguration();
 		logger.isDebug = config.isDebug;
 		client = new Client(config, vscode.env.language, logger);
 	});
@@ -49,6 +52,15 @@ export function activate(context: vscode.ExtensionContext) {
 			logger.error(`failed to decorate content: ${e.message}`);
 		}
 	}));
+
+	vscode.commands.registerCommand('slidaiv.command.setApiKey', async () => {
+		const input: string = await vscode.window.showInputBox({
+			placeHolder: 'Input your OpenAI API Key',
+			password: true,
+		}) ?? '';
+		// TODO: Refresh client
+		SecretApiKeyStore.instance.store(input);
+	})
 }
 
 // This method is called when your extension is deactivated

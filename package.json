@@ -56,9 +56,9 @@
       "title": "Slidaiv",
       "properties": {
         "slidaiv.apiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Specify OpenAI API Key"
+          "type": "null",
+          "default": null,
+          "markdownDescription": "Set API Key to authorize requests to OpenAI API from [here](command:slidaiv.command.setApiKey)."
         },
         "slidaiv.baseUrl": {
           "type": "string",
