@@ -19,13 +19,18 @@
   "contributes": {
     "commands": [
       {
-        "command": "slidaiv.generateContents",
+        "command": "slidaiv.command.generateContents",
         "title": "Generate Slidev contents",
         "category": "Slidaiv"
       },
       {
-        "command": "slidaiv.decorateContents",
+        "command": "slidaiv.command.decorateContents",
         "title": "Decorate contents (Experimental)",
+        "category": "Slidaiv"
+      },
+      {
+        "command": "slidaiv.command.setApiKey",
+        "title": "Set API Key",
         "category": "Slidaiv"
       }
     ],
@@ -45,11 +50,11 @@
       ],
       "slidaiv.submenu": [
         {
-          "command": "slidaiv.generateContents",
+          "command": "slidaiv.command.generateContents",
           "group": "slidaiv@1"
         },
         {
-          "command": "slidaiv.decorateContents",
+          "command": "slidaiv.command.decorateContents",
           "group": "slidaiv@2"
         }
       ]

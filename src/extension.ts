@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { ExtensionID } from '@/constants';
+import { CommandIdDecorateContents, CommandIdGenerateContents, CommandIdOpenSettingsApiKey, CommandIdSetApiKey, ExtensionID, ExtensionName, MessageSelectionSetApiKey, MessageSetApiKey, PreferenceIdApiKey } from '@/constants';
 import { SecretTokenStore as SecretApiKeyStore } from '@/secret';
 import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
@@ -16,44 +16,49 @@ async function initialize() {
 }
 
 async function setApiKey() {
-	const sel = await vscode.window.showWarningMessage(
-		'OpenAI API Key is not set. Please set it from the command palette.',
-		'Set API Key'
-	)
-	if (sel === 'Set API Key') {
-		vscode.commands.executeCommand('slidaiv.command.setApiKey');
+	const message = new vscode.MarkdownString(MessageSetApiKey);
+	message.isTrusted = true;
+	const sel = await vscode.window.showWarningMessage(message.value, MessageSelectionSetApiKey);
+	if (sel === MessageSelectionSetApiKey) {
+		vscode.commands.executeCommand(CommandIdSetApiKey);
 	}
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-	Logger.init(vscode.window.createOutputChannel('Slidaiv'));
+	Logger.init(vscode.window.createOutputChannel(ExtensionName));
 	SecretApiKeyStore.init(context);
 
 	let client: LLMClient = UnconfiguredClient.instance;
 
-	vscode.workspace.onDidChangeConfiguration(async (e) => {
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async (e) => {
 		if (!e.affectsConfiguration(ExtensionID)) {
 			return; // ignore other changes
 		}
 		client = await initialize();
-	});
+	}));
 
-	vscode.commands.registerCommand('slidaiv.command.setApiKey', async () => {
+	context.subscriptions.push(vscode.commands.registerCommand(CommandIdOpenSettingsApiKey, async () => {
+		Logger.debug("Open settings")
+		await vscode.commands.executeCommand('workbench.action.openSettings', PreferenceIdApiKey);
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand(CommandIdSetApiKey, async () => {
 		const input: string = await vscode.window.showInputBox({
 			placeHolder: 'Input your OpenAI API Key',
 			password: true,
 		}) ?? '';
 
+		await SecretApiKeyStore.instance.store(input);
 		if (!input) {
 			client = UnconfiguredClient.instance;
-			vscode.window.showErrorMessage("API Key is not set.")
+			const message = new vscode.MarkdownString(MessageSetApiKey);
+			message.isTrusted = true;
+			vscode.window.showWarningMessage(message.value)
 			return;
 		}
 
-		await SecretApiKeyStore.instance.store(input);
 		client = await initialize();
 		vscode.window.showInformationMessage("API Key is updated.")
-	});
+	}));
 
 	const apiKey = await SecretApiKeyStore.instance.get();
 	if (apiKey) {
@@ -63,10 +68,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		setApiKey();
 	}
 
-	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.generateContents', async () => {
+	context.subscriptions.push(vscode.commands.registerCommand(CommandIdGenerateContents, async () => {
 		doTaskWithProgress("Generating Slidev contents", getTaskGenerateContents(client));
 	}));
-	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.decorateContents', async () => {
+	context.subscriptions.push(vscode.commands.registerCommand(CommandIdDecorateContents, async () => {
 		doTaskWithProgress("Decorating Slidev contents", getTaskDecorateContent(client));
 	}));
 
