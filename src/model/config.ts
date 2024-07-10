@@ -1,30 +1,25 @@
 import * as vscode from 'vscode';
 
-import {
-    ConfigKeyApiBaseURL,
-    ConfigKeyApiKey,
-    ConfigKeyLLMModel,
-    ConfigKeyPromptGenerate,
-    ConfigKeyDebug,
-    ExtensionID,
-} from '@/constants';
+import * as Constants from '@/constants';
 
 export type Configuration = {
     apiKey: string;
     baseUrl: string | null;
     model: string;
-    isDebug: boolean;
     promptGenerate: string;
+    promptDecorate: string;
+    isDebug: boolean;
 };
 
 
 export function readConfiguration(): Configuration {
     const ws = vscode.workspace;
     return {
-        apiKey: ws.getConfiguration(ExtensionID).get(ConfigKeyApiKey) || '',
-        baseUrl: ws.getConfiguration(ExtensionID).get(ConfigKeyApiBaseURL) || null,
-        model: ws.getConfiguration(ExtensionID).get(ConfigKeyLLMModel) || '',
-        promptGenerate: ws.getConfiguration(ExtensionID).get(ConfigKeyPromptGenerate) || '',
-        isDebug: ws.getConfiguration(ExtensionID).get(ConfigKeyDebug) || false,
+        apiKey: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyApiKey) || '',
+        baseUrl: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyApiBaseURL) || null,
+        model: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyLLMModel) || '',
+        promptGenerate: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyPromptGenerate) || '',
+        promptDecorate: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyPromptDecorate) || '',
+        isDebug: ws.getConfiguration(Constants.ExtensionID).get(Constants.ConfigKeyDebug) || false,
     };
 };

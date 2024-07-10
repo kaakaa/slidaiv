@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { 
+import {
     evalPromptLiteral,
     getDecorateContentsPrompt,
     getGenerateContentsPrompt,
@@ -14,6 +14,7 @@ export class Client implements LLMClient {
     private client: OpenAI;
     private _llmModel: string;
     private promptGenerate: string;
+    private promptDecorate: string;
     private defaultLocale: string;
     private logger: Logger;
 
@@ -22,6 +23,7 @@ export class Client implements LLMClient {
         this._llmModel = config.model;
         this.defaultLocale = locale;
         this.promptGenerate = config.promptGenerate;
+        this.promptDecorate = config.promptDecorate;
         this.logger = logger;
     }
 
@@ -42,7 +44,7 @@ export class Client implements LLMClient {
 
         this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
         this.logger.debug(`sysPrompt=${sysPrompt}`);
-        
+
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
             messages: [{
@@ -55,7 +57,7 @@ export class Client implements LLMClient {
         }, {
             signal: ac.signal,
         });
-        
+
         const ret = resp?.choices[0]?.message?.content;
         this.logger.debug(`Response from OpenAI: ${ret}`);
         return ret;
@@ -67,7 +69,17 @@ export class Client implements LLMClient {
             ac.abort();
         });
 
-        const sysPrompt = getDecorateContentsPrompt();
+        let sysPrompt;
+        if (this.promptDecorate && this.promptDecorate.length > 0) {
+            sysPrompt = evalPromptLiteral(this.promptDecorate, {});
+        } else {
+            this.logger.info("Default prompt is used, because custom prompt is not set.")
+            sysPrompt = getDecorateContentsPrompt();
+        }
+
+        this.logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}`);
+        this.logger.debug(`sysPrompt=${sysPrompt}`);
+
         const resp = await this.client.chat.completions.create({
             model: this._llmModel,
             messages: [{
@@ -80,7 +92,10 @@ export class Client implements LLMClient {
         }, {
             signal: ac.signal,
         });
-        return resp.choices[0].message.content;
+
+        const ret = resp?.choices[0]?.message?.content;
+        this.logger.debug(`Response from OpenAI: ${ret}`);
+        return ret;
     }
 
     get llmModel(): string {
