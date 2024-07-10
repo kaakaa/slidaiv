@@ -4,15 +4,17 @@ import {
     ConfigKeyApiBaseURL,
     ConfigKeyApiKey,
     ConfigKeyLLMModel,
+    ConfigKeyPromptGenerate,
     ConfigKeyDebug,
     ExtensionID,
 } from '@/constants';
 
-type Configuration = {
+export type Configuration = {
     apiKey: string;
     baseUrl: string | null;
     model: string;
     isDebug: boolean;
+    promptGenerate: string;
 };
 
 
@@ -22,6 +24,7 @@ export function readConfiguration(): Configuration {
         apiKey: ws.getConfiguration(ExtensionID).get(ConfigKeyApiKey) || '',
         baseUrl: ws.getConfiguration(ExtensionID).get(ConfigKeyApiBaseURL) || null,
         model: ws.getConfiguration(ExtensionID).get(ConfigKeyLLMModel) || '',
+        promptGenerate: ws.getConfiguration(ExtensionID).get(ConfigKeyPromptGenerate) || '',
         isDebug: ws.getConfiguration(ExtensionID).get(ConfigKeyDebug) || false,
     };
 };

@@ -35,7 +35,6 @@ export const getTaskGenerateContents = (client: Client, logger: Logger) => {
         );
 
         logger.info(`Call LLM to generate the contents.`);
-        logger.debug(`{baseURL: ${client.baseURL}, model: ${client.llmModel}}`);
         const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token, logger), client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });

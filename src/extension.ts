@@ -8,8 +8,10 @@ import { readConfiguration } from '@/model/config';
 
 export function activate(context: vscode.ExtensionContext) {
 	let config = readConfiguration();
+
 	const logger = new Logger(vscode.window.createOutputChannel('Slidaiv'));
-	let client = new Client(config.apiKey, config.baseUrl, config.model, vscode.env.language);
+	logger.isDebug = config.isDebug;
+	let client = new Client(config, vscode.env.language, logger);
 
 	logger.info('Slidaiv is now active');
 
@@ -20,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		config = readConfiguration();
 		logger.isDebug = config.isDebug;
-		client = new Client(config.apiKey, config.baseUrl, config.model, vscode.env.language);
+		client = new Client(config, vscode.env.language, logger);
 	});
 
 	context.subscriptions.push(vscode.commands.registerCommand('slidaiv.generateContents', async () => {

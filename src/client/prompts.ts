@@ -32,3 +32,7 @@ export function getDecorateContentsPrompt() {
         Your entire response must be valid Slidev Markdown, identical to the input except for added CSS classes.
     `;
 }
+
+export function evalPromptLiteral(prompt: string, variables: { [key: string]: string }) {
+    return prompt.replace(/\${(\w+)\}/g, (_, key) => variables[key] || '')
+}
