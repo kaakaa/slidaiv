@@ -2,6 +2,8 @@
 
 Slidaiv leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.
 
+[![Demo](./resources/slidaiv-demo.gif)](./resources/slidaiv-demo.gif)
+
 ## Features
 
 - **Automatic Content Generation**: Generate Slidev content using AI/LLM based on user prompts.
