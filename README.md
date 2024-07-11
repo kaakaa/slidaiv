@@ -1,6 +1,6 @@
-# slidaiv
+# Slidaiv
 
-This is the README for the VS Code extension "slidaiv". This extension leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.
+Slidaiv leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.
 
 ## Features
 
