@@ -4,7 +4,7 @@ export function getDefaultPromptForGenerateContents(locale: string) {
 
         Please pay attention to the following points:
         1. Ouptut language must be in ${locale}.
-        2. MUST follow the Slidev syntax.
+        2. MUST follow the Slidev syntax, and MUST not include frontmatter in your output.
         3. Limit the slide to about 7 or less lines contents for brevity and clarity.
         4. Keep the slide content concise and visually comprehensible.
         5. Use bullet points or code blocks when necessary.
