@@ -62,3 +62,7 @@ cd .slidev && slidev serve
 # Wrap up
 ...
 ```
+
+## License
+
+See [License.txt](./LICENSE.txt)
