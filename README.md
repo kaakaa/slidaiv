@@ -2,7 +2,7 @@
 
 Slidaiv leverages AI/LLM to automatically generate content for [Slidev](https://sli.dev/) presentations, making it easier for users to write a Slidev presentation.
 
-[![Demo](./resources/slidaiv-demo.gif)](./resources/slidaiv-demo.gif)
+[![Demo](https://raw.githubusercontent.com/kaakaa/slidaiv/master/resources/slidaiv-demo.gif)](https://github.com/kaakaa/slidaiv/blob/master/resources/slidaiv-demo.gif))
 
 ## Features
 
