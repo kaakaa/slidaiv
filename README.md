@@ -1,3 +1,5 @@
+[![ci](https://github.com/kaakaa/slidaiv/actions/workflows/cicd.yml/badge.svg)](https://github.com/kaakaa/slidaiv/actions/workflows/cicd.yml)
+
 # Slidaiv
 
 Slidaiv leverages AI/LLM to automatically generate content for [Slidev](https://sli.dev/) presentations, making it easier for users to write a Slidev presentation.
