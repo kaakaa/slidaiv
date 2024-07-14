@@ -14,7 +14,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:markdown"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
