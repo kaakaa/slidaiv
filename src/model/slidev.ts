@@ -10,6 +10,7 @@ export class SlidevPage {
     private frontmatter: any;
     private prompts: string[];
     private locale: string | null;
+    private model: string | null;
 
     // constructor is private and the instance is created by factory method `init`,
     // because it isn't possible to use await in constructor
@@ -22,6 +23,7 @@ export class SlidevPage {
             throw new Error('No prompt found in the slide frontmatter');
         }
         this.locale = slide.frontmatter?.slidaiv?.locale || null;
+        this.model = slide.frontmatter?.slidaiv?.model || null;
     }
 
     static async init(text: string, filename: string, pos: number) {
@@ -35,7 +37,7 @@ export class SlidevPage {
 
     async rewriteByLLM(token: CustomCancellationToken, client: LLMClient) {
         const prompt = this.prompts.map((prompt: string) => `- ${prompt}`).join('\n');
-        const content = await client.generatePageContents(token, prompt, this.locale);
+        const content = await client.generatePageContents(token, prompt, this.model, this.locale);
         return `${obj2frontmatter(this.frontmatter)}\n\n${content}\n\n`;
     }
 
