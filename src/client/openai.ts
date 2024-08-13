@@ -12,26 +12,27 @@ import { Logger } from '@/logger';
 
 export class Client implements LLMClient {
     private client: OpenAI;
-    private _llmModel: string;
+    private llmModel: string;
     private promptGenerate: string;
     private promptDecorate: string;
     private defaultLocale: string;
 
     constructor(config: Configuration, locale: string) {
         this.client = new OpenAI({ apiKey: config.apiKey, baseURL: config.baseUrl });
-        this._llmModel = config.model;
+        this.llmModel = config.model;
         this.defaultLocale = locale;
         this.promptGenerate = config.promptGenerate;
         this.promptDecorate = config.promptDecorate;
     }
 
-    async generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null> {
+    async generatePageContents(token: CustomCancellationToken, prompt: string, m: string | null, locale: string | null): Promise<string | null> {
         const ac = new AbortController();
         token.onCancellationRequested(() => {
             ac.abort();
         });
 
         const loc = getLocaleName(locale || this.defaultLocale);
+        const model = m || this.llmModel;
         let sysPrompt;
         if (this.promptGenerate && this.promptGenerate.length > 0) {
             sysPrompt = evalPromptLiteral(this.promptGenerate, { locale: loc });
@@ -40,11 +41,11 @@ export class Client implements LLMClient {
             sysPrompt = getDefaultPromptForGenerateContents(loc);
         }
 
-        Logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${this.llmModel}, locale=${locale}`);
+        Logger.info(`Call OpenAI details: URL=${this.client.baseURL}, model=${model}, locale=${locale}`);
         Logger.debug(`sysPrompt=${sysPrompt}`);
 
         const resp = await this.client.chat.completions.create({
-            model: this._llmModel,
+            model: model,
             messages: [
                 { "role": "system", "content": sysPrompt },
                 { "role": "user", "content": prompt }
@@ -76,7 +77,7 @@ export class Client implements LLMClient {
         Logger.debug(`sysPrompt=${sysPrompt}`);
 
         const resp = await this.client.chat.completions.create({
-            model: this._llmModel,
+            model: this.llmModel,
             messages: [
                 { "role": "system", "content": sysPrompt },
                 { "role": "user", "content": prompt }
@@ -88,10 +89,6 @@ export class Client implements LLMClient {
         const ret = resp?.choices[0]?.message?.content;
         Logger.debug(`Response from OpenAI: ${ret}`);
         return ret;
-    }
-
-    get llmModel(): string {
-        return this._llmModel;
     }
 
     get baseURL(): string {
