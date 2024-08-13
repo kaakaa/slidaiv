@@ -67,4 +67,4 @@ cd .slidev && slidev serve
 
 ## License
 
-See [License.txt](./LICENSE.txt)
+See [LICENSE.txt](./LICENSE.txt)
