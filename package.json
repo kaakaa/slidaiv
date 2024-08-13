@@ -111,6 +111,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
+    "cli:build": "tsc --noEmit -p src/cli/tsconfig.cli.json && esbuild src/cli/main.ts --bundle --platform=node --format=cjs --outfile=dist-cli/index.js",
     "mock-server": "prism mock -d ./e2e/mock-openai.yaml"
   },
   "devDependencies": {
@@ -130,6 +131,7 @@
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.3.9",
     "@vscode/vsce": "^2.29.0",
+    "esbuild": "^0.23.0",
     "eslint": "^8.57.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
@@ -137,6 +139,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "js-yaml": "^4.1.0",
     "openai": "^4.47.1"
   }
