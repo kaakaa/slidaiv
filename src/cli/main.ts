@@ -9,7 +9,8 @@ import { parse } from "@slidev/parser";
 import { getDefaultPromptDecorateContents, getDefaultPromptForGenerateContents } from '@/client/prompts';
 import { Configuration } from '@/model/config';
 
-// TODO: YAMLファイルや出力先などのハードコードを無くす
+// TODO: logging
+// TODO: refactoring
 
 const SlidevHeader = `---
 theme: seriph
@@ -35,22 +36,30 @@ const program = new Command();
 program
   .option('-i, --input <file>', 'input yaml file path to generate slide', 'slides.yaml')
   .option('-o, --output <file>', 'output path to write markdown file', 'generated-slides.md')
-  .option('-l, --locale <locale>', 'locale of generated slide', 'en');
+  .option('-l, --locale <locale>', 'locale of generated slide', 'en')
+  .option('-u, --apiurl <url>', 'base url of openai api')
+  .option('-k, --apikey', 'api key of openai (or openai-compatible) api ')
+  .option('-m, --model <model>', 'model of openai api')
+  .option('-d, --debug', 'output extra debugging', false);
 
 program.parse();
 
 const options = program.opts();
-const {input, output, locale} = options;
-console.log(`input: ${input}`);
-console.log(`output: ${output}`);
-console.log(`locale: ${locale}`);
+const {input, output, locale, apiurl, apikey, model, debug} = options;
 
+
+type Merge<T> = { [K in keyof T]: T[K] };
 type Slide = {
   title: string;
   prompts: string[];
 }
+type CLIConfiguration = {
+  input: string;
+  output: string;
+  locale: string;
+}
 type config = {
-  service: Configuration;
+  service: Merge<Configuration & CLIConfiguration>;
   slides: Slide[];
 }
 type GeneratedSlide = {
@@ -62,13 +71,22 @@ const f = fs.readFileSync(input, 'utf8');
 const conf = yaml.parse(f) as config;
 
 const config = {
-  apiKey: conf.service.apiKey,
-  baseUrl: conf.service.baseUrl,
-  model: conf.service.model,
+  apiKey: apikey ?? conf.service.apiKey,
+  baseUrl: apiurl ?? conf.service.baseUrl,
+  model: model ?? conf.service.model,
   promptGenerate: getDefaultPromptForGenerateContents(locale),
   promptDecorate: getDefaultPromptDecorateContents(),
-  isDebug: true,
+  isDebug: debug ?? true,
 };
+
+console.log(`  input: ${input}`);
+console.log(`  output: ${output}`);
+console.log(`  locale: ${locale}`);
+console.log(`  apiurl: ${apiurl}`);
+console.log(`  apikey: xxxx`);
+console.log(`  model: ${model}`);
+console.log(`  debug: ${debug}`);
+console.log(config);
 
 const client = new OpenAI({ apiKey: config.apiKey, baseURL: config.baseUrl });
 const pages: GeneratedSlide[] = [];
