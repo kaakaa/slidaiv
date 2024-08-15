@@ -4,7 +4,10 @@ import yaml from 'yaml';
 
 import { MultiBar, Presets } from 'cli-progress';
 import { OpenAI } from 'openai';
+
+import { parse } from "@slidev/parser";
 import { getDefaultPromptDecorateContents, getDefaultPromptForGenerateContents } from '@/client/prompts';
+import { Configuration } from '@/model/config';
 
 // TODO: YAMLファイルや出力先などのハードコードを無くす
 
@@ -28,17 +31,19 @@ rabbit:
 ---
 `;
 
-/* TODO: Implement command line options
 const program = new Command();
 program
-  .option('--first')
-  .option('-s, --separator <char>');
+  .option('-i, --input <file>', 'input yaml file path to generate slide', 'slides.yaml')
+  .option('-o, --output <file>', 'output path to write markdown file', 'generated-slides.md')
+  .option('-l, --locale <locale>', 'locale of generated slide', 'en');
 
 program.parse();
 
 const options = program.opts();
-const limit = options.first ? 1 : undefined;
-*/
+const {input, output, locale} = options;
+console.log(`input: ${input}`);
+console.log(`output: ${output}`);
+console.log(`locale: ${locale}`);
 
 type Slide = {
   title: string;
@@ -53,10 +58,9 @@ type GeneratedSlide = {
   contents: string;
 }
 
-const f = fs.readFileSync('slides.yaml', 'utf8');
+const f = fs.readFileSync(input, 'utf8');
 const conf = yaml.parse(f) as config;
 
-const locale = "ja";
 const config = {
   apiKey: conf.service.apiKey,
   baseUrl: conf.service.baseUrl,
@@ -88,15 +92,13 @@ const promises = conf.slides.map((slide, idx) => {
   });
 });
 
-import { parse } from "@slidev/parser";
-import { Configuration } from '@/model/config';
 
 Promise.all(promises).then(() => {
   progress.stop();
   multi.stop();
   pages.sort((a, b) => a.index - b.index);
-  parse(pages.map((p) => p.contents).join("\n"), "test.md").then((parsed) => {
-    fs.writeFileSync("slidaiv-cli-test/slides.md", `${SlidevHeader}\n${parsed.raw}\n`);
+  parse(pages.map((p) => p.contents).join("\n"), output).then((parsed) => {
+    fs.writeFileSync(output, `${SlidevHeader}\n${parsed.raw}\n`);
     console.log("Done");
   });
 });
