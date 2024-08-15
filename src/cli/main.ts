@@ -6,7 +6,6 @@ import { MultiBar, Presets } from 'cli-progress';
 import { OpenAI } from 'openai';
 import { getDefaultPromptDecorateContents, getDefaultPromptForGenerateContents } from '@/client/prompts';
 
-// TODO: YAMLファイルのスライドの順序を保持する
 // TODO: YAMLファイルや出力先などのハードコードを無くす
 
 const SlidevHeader = `---
@@ -49,6 +48,10 @@ type config = {
   service: Configuration;
   slides: Slide[];
 }
+type GeneratedSlide = {
+  index: number;
+  contents: string;
+}
 
 const f = fs.readFileSync('slides.yaml', 'utf8');
 const conf = yaml.parse(f) as config;
@@ -64,14 +67,14 @@ const config = {
 };
 
 const client = new OpenAI({ apiKey: config.apiKey, baseURL: config.baseUrl });
-const pages: string[] = [];
+const pages: GeneratedSlide[] = [];
 // const prompts = ["What your name?", "Where are you from?", "How old are you?"];
 
 const multi = new MultiBar({}, Presets.shades_classic);
 const progress = multi.create(conf.slides?.length, 0);
 multi.log("Generating slides...\n");
 
-const promises = conf.slides.map((slide) => {
+const promises = conf.slides.map((slide, idx) => {
   return client.chat.completions.create({
     model: config.model,
     messages: [
@@ -81,7 +84,7 @@ const promises = conf.slides.map((slide) => {
   }).then((resp) => {
     progress.increment();
     const ret = resp?.choices[0]?.message?.content;
-    if (ret) ( pages.push(`${ret}\n---\n`) );
+    if (ret) ( pages.push({index:idx, contents:`${ret}\n---\n`}));
   });
 });
 
@@ -91,7 +94,8 @@ import { Configuration } from '@/model/config';
 Promise.all(promises).then(() => {
   progress.stop();
   multi.stop();
-  parse(pages.join("\n"), "test.md").then((parsed) => {
+  pages.sort((a, b) => a.index - b.index);
+  parse(pages.map((p) => p.contents).join("\n"), "test.md").then((parsed) => {
     fs.writeFileSync("slidaiv-cli-test/slides.md", `${SlidevHeader}\n${parsed.raw}\n`);
     console.log("Done");
   });
