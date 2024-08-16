@@ -11,8 +11,8 @@ import { GeneratedSlide, loadConfig, SlidevHeader } from '@/cli/util';
 const program = new Command();
 program
   .option('-i, --input <file>', 'input yaml file path to generate slide', 'slides.yaml')
-  .option('-o, --output <file>', 'output path to write markdown file', 'generated-slides.md')
-  .option('-l, --locale <locale>', 'locale of generated slide', 'en')
+  .option('-o, --output <file>', 'output path to write markdown file')
+  .option('-l, --locale <locale>', 'locale of generated slide')
   .option('-u, --apiurl <url>', 'base url of openai api')
   .option('-k, --apikey', 'api key of openai (or openai-compatible) api ')
   .option('-m, --model <model>', 'model of openai api')

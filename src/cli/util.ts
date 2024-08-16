@@ -55,17 +55,17 @@ export function loadConfig(f: string, options: OptionValues): CLIConfiguration {
     const { input, output, locale, apiurl, apikey, model, debug } = options;
     const conf = yaml.parse(f) as CLIConfiguration;
 
-    const loc = locale ?? conf.service.locale;
+    const loc = locale ?? conf.service.locale ?? "en";
 
     return {
         service: {
-            apiKey: apikey ?? conf.service.apiKey,
-            baseUrl: apiurl ?? conf.service.baseUrl,
-            model: model ?? conf.service.model,
+            apiKey: apikey ?? conf.service.apiKey ?? "dummy",
+            baseUrl: apiurl ?? conf.service.baseUrl ?? "https://openai.com/v1",
+            model: model ?? conf.service.model ?? "gpt-4o",
             promptGenerate: getDefaultPromptForGenerateContents(loc),
             promptDecorate: getDefaultPromptDecorateContents(),
-            input: input ?? conf.service.input,
-            output: output ?? conf.service.output,
+            input: input,
+            output: output ?? conf.service.output ?? "generated-slides.md",
             locale: loc,
             isDebug: debug ?? true,
         },
