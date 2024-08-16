@@ -15,7 +15,7 @@ program
   .option('-i, --input <file>', 'input yaml file path to generate slide', 'slides.yaml')
   .option('-o, --output <file>', 'output path to write markdown file')
   .option('-l, --locale <locale>', 'locale of generated slide')
-  .option('-u, --apiurl <url>', 'base url of openai api')
+  .option('-u, --apiurl <url>', 'base url of openai api (e.g.: https://api.openai.com/v1)')
   .option('-k, --apikey', 'api key of openai (or openai-compatible) api ')
   .option('-m, --model <model>', 'model of openai api')
   .option('-d, --debug', 'output extra debugging', false);
