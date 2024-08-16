@@ -1,7 +1,7 @@
 import type { CustomCancellationToken } from "@/tasks";
 
 export interface LLMClient {
-    generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null>;
+    generatePageContents(token: CustomCancellationToken, prompt: string, model: string | null, locale: string | null): Promise<string | null>;
     decorateContents(token: CustomCancellationToken, prompt: string): Promise<string | null>;
 }
 
@@ -16,7 +16,7 @@ export class UnconfiguredClient implements LLMClient {
         return UnconfiguredClient._instance;
     }
 
-    generatePageContents(token: CustomCancellationToken, prompt: string, locale: string | null): Promise<string | null> {
+    generatePageContents(token: CustomCancellationToken, prompt: string, model: string | null, locale: string | null): Promise<string | null> {
         throw new Error("Client have not been configured yet.");
     }
     decorateContents(token: CustomCancellationToken, prompt: string): Promise<string | null> {
