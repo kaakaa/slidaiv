@@ -1,4 +1,4 @@
-import { CustomCancellationToken } from "@/tasks";
+import type { CustomCancellationToken } from "@/tasks";
 
 export interface LLMClient {
     generatePageContents(token: CustomCancellationToken, prompt: string, model: string | null, locale: string | null): Promise<string | null>;

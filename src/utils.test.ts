@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+
 import { getLocaleName, obj2frontmatter } from "./utils";
 
 suite('obj2frontmatter', () => {

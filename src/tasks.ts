@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { Logger } from "@/logger";
 import { SlidevPage } from '@/model/slidev';
-import { LLMClient } from './client/llmClient';
+import type { LLMClient } from '@/client/llmClient';
 
 export class CustomCancellationToken {
     constructor(private readonly token: vscode.CancellationToken) { }

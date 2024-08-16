@@ -6,7 +6,8 @@ import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
 import { doTaskWithProgress, getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 import { readConfiguration } from '@/model/config';
-import { LLMClient, UnconfiguredClient } from './client/llmClient';
+import { UnconfiguredClient } from '@/client/llmClient';
+import type { LLMClient } from '@/client/llmClient';
 
 async function initialize() {
 	const config = await readConfiguration();
@@ -38,7 +39,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand(CommandIdOpenSettingsApiKey, async () => {
-		Logger.debug("Open settings")
+		Logger.debug("Open settings");
 		await vscode.commands.executeCommand('workbench.action.openSettings', PreferenceIdApiKey);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand(CommandIdSetApiKey, async () => {
@@ -52,12 +53,12 @@ export async function activate(context: vscode.ExtensionContext) {
 			client = UnconfiguredClient.instance;
 			const message = new vscode.MarkdownString(MessageSetApiKey);
 			message.isTrusted = true;
-			vscode.window.showWarningMessage(message.value)
+			vscode.window.showWarningMessage(message.value);
 			return;
 		}
 
 		client = await initialize();
-		vscode.window.showInformationMessage("API Key is updated.")
+		vscode.window.showInformationMessage("API Key is updated.");
 	}));
 
 	const apiKey = await SecretApiKeyStore.instance.get();
