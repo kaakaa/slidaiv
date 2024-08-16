@@ -10,6 +10,9 @@
     "vscode": "^1.89.0",
     "node": ">=18.0.0"
   },
+  "bin": {
+    "slidaiv": "./dist/slidaiv-cli.js"
+  },
   "categories": [
     "Other"
   ],
@@ -111,7 +114,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-    "cli:build": "esbuild src/cli/main.ts --bundle --platform=node --format=cjs --outfile=dist-cli/index.js",
+    "cli:compile": "esbuild src/cli/main.ts --bundle --platform=node --format=cjs --outfile=dist/slidaiv-cli.js",
     "mock-server": "prism mock -d ./e2e/mock-openai.yaml"
   },
   "devDependencies": {
