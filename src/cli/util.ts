@@ -9,7 +9,7 @@ import {
 
 export type Merge<T> = { [K in keyof T]: T[K] };
 
-export type Slide = {
+export type SlideInput = {
     title: string;
     prompts: string[];
 };
@@ -20,9 +20,9 @@ export type CLIOptions = {
     locale: string;
 };
 
-export type CLIConfiguration = {
-    service: Merge<Configuration & CLIOptions>;
-    slides: Slide[];
+export type CLISettings = {
+    context: Merge<Configuration & CLIOptions>;
+    slides: SlideInput[];
 };
 
 export type GeneratedSlide = {
@@ -50,24 +50,24 @@ rabbit:
 ---
 `;
 
-export function loadConfig(f: string, options: OptionValues): CLIConfiguration {
+export function loadConfig(f: string, options: OptionValues): CLISettings {
     const { input, output, locale, apiurl, apikey, model, debug } = options;
-    const conf = yaml.parse(f) as CLIConfiguration;
+    const settings = yaml.parse(f) as CLISettings;
 
-    const loc = locale ?? conf.service.locale ?? "en";
+    const loc = locale ?? settings.context.locale ?? "en";
 
     return {
-        service: {
-            apiKey: apikey ?? conf.service.apiKey ?? "dummy",
-            baseUrl: apiurl ?? conf.service.baseUrl ?? "https://openai.com/v1",
-            model: model ?? conf.service.model ?? "gpt-4o",
+        context: {
+            apiKey: apikey ?? settings.context.apiKey ?? "dummy",
+            baseUrl: apiurl ?? settings.context.baseUrl ?? "https://openai.com/v1",
+            model: model ?? settings.context.model ?? "gpt-4o",
             promptGenerate: getDefaultPromptForGenerateContents(loc),
             promptDecorate: getDefaultPromptDecorateContents(),
             input: input,
-            output: output ?? conf.service.output ?? "generated-slides.md",
+            output: output ?? settings.context.output ?? "generated-slides.md",
             locale: loc,
             isDebug: debug ?? true,
         },
-        slides: conf.slides,
+        slides: settings.slides,
     };
 }

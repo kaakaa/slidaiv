@@ -6,9 +6,10 @@ import { OpenAI } from 'openai';
 
 import { parse } from "@slidev/parser";
 
-import { loadConfig, SlidevHeader } from '@/cli/util';
+import { loadConfig as loadSettings, SlidevHeader } from '@/cli/util';
 import type { GeneratedSlide } from '@/cli/util';
 
+// Load configs
 const program = new Command();
 program
   .option('-i, --input <file>', 'input yaml file path to generate slide', 'slides.yaml')
@@ -18,23 +19,28 @@ program
   .option('-k, --apikey', 'api key of openai (or openai-compatible) api ')
   .option('-m, --model <model>', 'model of openai api')
   .option('-d, --debug', 'output extra debugging', false);
-
 const options = program.parse().opts();
-const config = loadConfig(fs.readFileSync(options.input, 'utf8'), options);
-console.log(config);
+const settings = loadSettings(fs.readFileSync(options.input, 'utf8'), options);
+console.log(settings);
 
-const client = new OpenAI({ apiKey: config.service.apiKey, baseURL: config.service.baseUrl });
-const pages: GeneratedSlide[] = [];
-
+// Set up
 const multi = new MultiBar({}, Presets.shades_classic);
-const progress = multi.create(config.slides?.length, 0);
+const progress = multi.create(settings.slides?.length, 0);
+
+const client = new OpenAI({
+  apiKey: settings.context.apiKey,
+  baseURL: settings.context.baseUrl
+});
+
 multi.log("Generating slides...\n");
 
-const promises = config.slides.map((slide, idx) => {
+// Generate slides
+const pages: GeneratedSlide[] = [];
+const promises = settings.slides.map((slide, idx) => {
   return client.chat.completions.create({
-    model: config.service.model,
+    model: settings.context.model,
     messages: [
-      {"role": "system", "content": config.service.promptGenerate},
+      {"role": "system", "content": settings.context.promptGenerate},
       {"role": "user", "content": slide.prompts.join("\n")},
     ],
   }).then((resp) => {
@@ -46,13 +52,13 @@ const promises = config.slides.map((slide, idx) => {
   });
 });
 
-
+// Write out generated slides
 Promise.all(promises).then(() => {
   progress.stop();
   multi.stop();
   pages.sort((a, b) => a.index - b.index);
-  parse(pages.map((p) => p.contents).join("\n"), config.service.output).then((parsed) => {
-    fs.writeFileSync(config.service.output, `${SlidevHeader}\n${parsed.raw}\n`);
+  parse(pages.map((p) => p.contents).join("\n"), settings.context.output).then((parsed) => {
+    fs.writeFileSync(settings.context.output, `${SlidevHeader}\n${parsed.raw}\n`);
     console.log("Done");
   });
 });
