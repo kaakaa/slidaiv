@@ -1,8 +1,9 @@
 import { parse } from "@slidev/parser";
-import { SourceSlideInfo } from "@slidev/types";
+import type { SourceSlideInfo } from "@slidev/types";
+
 import { obj2frontmatter } from "@/utils";
-import { CustomCancellationToken } from "@/tasks";
-import { LLMClient } from "@/client/llmClient";
+import type { CustomCancellationToken } from "@/tasks";
+import type { LLMClient } from "@/client/llmClient";
 
 export class SlidevPage {
     private _start: number;

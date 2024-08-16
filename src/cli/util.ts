@@ -1,8 +1,7 @@
 import yaml from 'yaml';
-
-import { Configuration } from '@/model/config';
 import type { OptionValues } from 'commander';
 
+import type { Configuration } from '@/model/config';
 import {
     getDefaultPromptDecorateContents,
     getDefaultPromptForGenerateContents
@@ -13,23 +12,23 @@ export type Merge<T> = { [K in keyof T]: T[K] };
 export type Slide = {
     title: string;
     prompts: string[];
-}
+};
 
 export type CLIOptions = {
     input: string;
     output: string;
     locale: string;
-}
+};
 
 export type CLIConfiguration = {
     service: Merge<Configuration & CLIOptions>;
     slides: Slide[];
-}
+};
 
 export type GeneratedSlide = {
     index: number;
     contents: string;
-}
+};
 
 export const SlidevHeader = `---
 theme: seriph

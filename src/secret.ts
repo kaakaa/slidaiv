@@ -1,4 +1,4 @@
-import { ExtensionContext, SecretStorage } from "vscode";
+import type { ExtensionContext, SecretStorage } from "vscode";
 
 export class SecretTokenStore {
     private static _instance: SecretTokenStore;

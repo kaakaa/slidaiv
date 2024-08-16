@@ -1,12 +1,13 @@
-import { Command } from 'commander';
 import fs from 'fs';
 
+import { Command } from 'commander';
 import { MultiBar, Presets } from 'cli-progress';
 import { OpenAI } from 'openai';
 
 import { parse } from "@slidev/parser";
 
-import { GeneratedSlide, loadConfig, SlidevHeader } from '@/cli/util';
+import { loadConfig, SlidevHeader } from '@/cli/util';
+import type { GeneratedSlide } from '@/cli/util';
 
 const program = new Command();
 program
@@ -39,7 +40,9 @@ const promises = config.slides.map((slide, idx) => {
   }).then((resp) => {
     progress.increment();
     const ret = resp?.choices[0]?.message?.content;
-    if (ret) ( pages.push({index:idx, contents:`${ret}\n---\n`}));
+    if (ret) {
+       pages.push({index:idx, contents:`${ret}\n---\n`});
+    }
   });
 });
 

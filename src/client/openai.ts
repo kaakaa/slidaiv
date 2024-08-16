@@ -1,14 +1,15 @@
 import OpenAI from 'openai';
+
 import {
     evalPromptLiteral,
     getDefaultPromptDecorateContents,
     getDefaultPromptForGenerateContents,
 } from '@/client/prompts';
 import { getLocaleName } from '@/utils';
-import { CustomCancellationToken } from '@/tasks';
-import { LLMClient } from '@/client/llmClient';
-import type { Configuration } from '@/model/config';
 import { Logger } from '@/logger';
+import type { CustomCancellationToken } from '@/tasks';
+import type { LLMClient } from '@/client/llmClient';
+import type { Configuration } from '@/model/config';
 
 export class Client implements LLMClient {
     private client: OpenAI;
