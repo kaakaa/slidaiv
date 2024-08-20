@@ -26,7 +26,7 @@ program
   .option('-d, --debug', 'output extra debugging', false);
 const options = program.parse().opts();
 const settings = loadSettings(fs.readFileSync(options.input, 'utf8'), options);
-console.log(settings);
+Logger.debug(JSON.stringify(settings, null, 2));
 
 class CancelHandler implements CustomCancellationToken {
   onCancellationRequested(callback: () => void): void {
@@ -50,9 +50,11 @@ slidaiv:
   prompt:
 ${prompts}
 ---`;
+
   const page = await SlidevPage.init(slidevPageStr, `page${idx}.md`, 1);
   await page.rewriteByLLM(new CancelHandler(), client);
   pages.push({index:idx, contents: page.toString()});
+
   progress.increment();
 });
 
@@ -61,9 +63,11 @@ ${prompts}
 Promise.all(promises).then(() => {
   progress.stop();
   multi.stop();
+
   pages.sort((a, b) => a.index - b.index);
+
   parse(pages.map((p) => p.contents).join("\n"), settings.context.output).then((parsed) => {
     fs.writeFileSync(settings.context.output, `${SlidevHeader}\n${parsed.raw}\n`);
-    console.log("Done");
+    Logger.info("Done");
   });
 });
