@@ -4,17 +4,6 @@ import { Logger } from "@/logger";
 import { SlidevPage } from '@/model/slidev';
 import type { LLMClient } from '@/client/llmClient';
 
-export class CustomCancellationToken {
-    constructor(private readonly token: vscode.CancellationToken) { }
-
-    onCancellationRequested(listener: () => void): vscode.Disposable {
-        return this.token.onCancellationRequested(() => {
-            Logger.info("User requested to cancel the task.");
-            listener();
-        });
-    }
-}
-
 export const getTaskGenerateContents = (client: LLMClient) => {
     return async (progress: vscode.Progress<any>, token: vscode.CancellationToken) => {
         Logger.info('Generating contents');
@@ -30,13 +19,13 @@ export const getTaskGenerateContents = (client: LLMClient) => {
         );
 
         Logger.info(`Call LLM to generate the contents.`);
-        const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token), client);
+        await slidevPage.rewriteByLLM(token, client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
         Logger.info('Write the slide contents');
         const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
         const edit = new vscode.WorkspaceEdit();
-        edit.replace(editor.document.uri, range, page);
+        edit.replace(editor.document.uri, range, slidevPage.toString());
         const isEdited = await vscode.workspace.applyEdit(edit);
         if (!isEdited) {
             throw new Error('Failed to write the generated slide contents');
@@ -63,7 +52,7 @@ export const getTaskDecorateContent = (client: LLMClient) => {
         Logger.debug(`selection: \n${highlighted}`);
 
         Logger.info('Call LLM to decorate the contents');
-        const decorated = await client.decorateContents(new CustomCancellationToken(token), highlighted);
+        const decorated = await client.decorateContents(token, highlighted);
         Logger.debug(`decorated: \n${decorated}`);
         if (!decorated) {
             throw new Error('Failed to decorate the contents');

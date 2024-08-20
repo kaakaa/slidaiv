@@ -26,7 +26,7 @@ async function setApiKey() {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-	Logger.init(vscode.window.createOutputChannel(ExtensionName));
+	Logger.init(vscode.window.createOutputChannel(ExtensionName).appendLine);
 	SecretApiKeyStore.init(context);
 
 	let client: LLMClient = UnconfiguredClient.instance;

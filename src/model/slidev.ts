@@ -2,14 +2,14 @@ import { parse } from "@slidev/parser";
 import type { SourceSlideInfo } from "@slidev/types";
 
 import { obj2frontmatter } from "@/utils";
-import type { CustomCancellationToken } from "@/tasks";
-import type { LLMClient } from "@/client/llmClient";
+import type { CustomCancellationToken, LLMClient } from "@/client/llmClient";
 
 export class SlidevPage {
     private _start: number;
     private _end: number;
     private frontmatter: any;
     private prompts: string[];
+    private content: string;
     private locale: string | null;
     private model: string | null;
 
@@ -23,6 +23,7 @@ export class SlidevPage {
         if (this.prompts.length === 0) {
             throw new Error('No prompt found in the slide frontmatter');
         }
+        this.content = slide.content;
         this.locale = slide.frontmatter?.slidaiv?.locale || null;
         this.model = slide.frontmatter?.slidaiv?.model || null;
     }
@@ -38,8 +39,11 @@ export class SlidevPage {
 
     async rewriteByLLM(token: CustomCancellationToken, client: LLMClient) {
         const prompt = this.prompts.map((prompt: string) => `- ${prompt}`).join('\n');
-        const content = await client.generatePageContents(token, prompt, this.model, this.locale);
-        return `${obj2frontmatter(this.frontmatter)}\n\n${content}\n\n`;
+        this.content = await client.generatePageContents(token, prompt, this.model, this.locale) ?? '';
+    }
+
+    toString(): string {
+        return `${obj2frontmatter(this.frontmatter)}\n\n${this.content}\n\n`;
     }
 
     get start(): number {

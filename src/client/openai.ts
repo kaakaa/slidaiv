@@ -7,8 +7,7 @@ import {
 } from '@/client/prompts';
 import { getLocaleName } from '@/utils';
 import { Logger } from '@/logger';
-import type { CustomCancellationToken } from '@/tasks';
-import type { LLMClient } from '@/client/llmClient';
+import type { CustomCancellationToken, LLMClient } from '@/client/llmClient';
 import type { Configuration } from '@/model/config';
 
 export class Client implements LLMClient {
@@ -29,6 +28,7 @@ export class Client implements LLMClient {
     async generatePageContents(token: CustomCancellationToken, prompt: string, m: string | null, locale: string | null): Promise<string | null> {
         const ac = new AbortController();
         token.onCancellationRequested(() => {
+            Logger.info("User requested to cancel the task.");
             ac.abort();
         });
 
