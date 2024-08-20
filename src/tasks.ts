@@ -30,13 +30,13 @@ export const getTaskGenerateContents = (client: LLMClient) => {
         );
 
         Logger.info(`Call LLM to generate the contents.`);
-        const page = await slidevPage.rewriteByLLM(new CustomCancellationToken(token), client);
+        await slidevPage.rewriteByLLM(new CustomCancellationToken(token), client);
 
         progress.report({ increment: 80, message: 'Write the generated slide contents' });
         Logger.info('Write the slide contents');
         const range = new vscode.Range(slidevPage.start, 0, slidevPage.end, 0);
         const edit = new vscode.WorkspaceEdit();
-        edit.replace(editor.document.uri, range, page);
+        edit.replace(editor.document.uri, range, slidevPage.toString());
         const isEdited = await vscode.workspace.applyEdit(edit);
         if (!isEdited) {
             throw new Error('Failed to write the generated slide contents');
