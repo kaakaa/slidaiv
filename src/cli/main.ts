@@ -2,12 +2,17 @@ import fs from 'fs';
 
 import { Command } from 'commander';
 import { MultiBar, Presets } from 'cli-progress';
-import { OpenAI } from 'openai';
 
 import { parse } from "@slidev/parser";
 
+import { Logger } from '@/logger';
 import { loadConfig as loadSettings, SlidevHeader } from '@/cli/util';
 import type { GeneratedSlide } from '@/cli/util';
+import { Client } from '@/client/openai';
+import type { CustomCancellationToken } from '@/client/llmClient';
+import { SlidevPage } from '@/model/slidev';
+
+Logger.init((message: string) => { console.log(message); });
 
 // Load configs
 const program = new Command();
@@ -23,34 +28,34 @@ const options = program.parse().opts();
 const settings = loadSettings(fs.readFileSync(options.input, 'utf8'), options);
 console.log(settings);
 
+class CancelHandler implements CustomCancellationToken {
+  onCancellationRequested(callback: () => void): void {
+    process.on('SIGINT', () => { callback(); });
+  }
+}
+
 // Set up
 const multi = new MultiBar({}, Presets.shades_classic);
 const progress = multi.create(settings.slides?.length, 0);
-
-const client = new OpenAI({
-  apiKey: settings.context.apiKey,
-  baseURL: settings.context.baseUrl
-});
+const client = new Client(settings.context, settings.context.locale);
 
 multi.log("Generating slides...\n");
 
 // Generate slides
 const pages: GeneratedSlide[] = [];
-const promises = settings.slides.map((slide, idx) => {
-  return client.chat.completions.create({
-    model: settings.context.model,
-    messages: [
-      {"role": "system", "content": settings.context.promptGenerate},
-      {"role": "user", "content": slide.prompts.join("\n")},
-    ],
-  }).then((resp) => {
-    progress.increment();
-    const ret = resp?.choices[0]?.message?.content;
-    if (ret) {
-       pages.push({index:idx, contents:`${ret}\n---\n`});
-    }
-  });
+const promises = settings.slides.map(async (slide, idx) => {
+  const prompts = slide.prompts.map((p) => `  - ${p}`).join("\n");
+  const slidevPageStr = `---
+slidaiv:
+  prompt:
+${prompts}
+---`;
+  const page = await SlidevPage.init(slidevPageStr, `page${idx}.md`, 1);
+  await page.rewriteByLLM(new CancelHandler(), client);
+  pages.push({index:idx, contents: page.toString()});
+  progress.increment();
 });
+
 
 // Write out generated slides
 Promise.all(promises).then(() => {

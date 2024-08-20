@@ -10,7 +10,6 @@ import {
 export type Merge<T> = { [K in keyof T]: T[K] };
 
 export type SlideInput = {
-    title: string;
     prompts: string[];
 };
 
