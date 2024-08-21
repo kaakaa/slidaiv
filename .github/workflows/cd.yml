@@ -36,9 +36,10 @@ jobs:
     - name: Publish CLI to npm
       run: |
         pnpm run cli:compile
-        pnpm publish --provenance --access public
+        pnpm publish --no-git-checks --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_CONFIG_PROVENANCE: true
     - name: Publish VSCode extension to Marketplace
       run: pnpm run deploy
       env:
