@@ -1,5 +1,5 @@
 {
-  "name": "slidaiv",
+  "name": "@kaakaa/slidaiv",
   "displayName": "Slidaiv",
   "description": "Slidaiv extension leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.",
   "publisher": "kaakaa",
