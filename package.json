@@ -1,17 +1,24 @@
 {
-  "name": "slidaiv",
+  "name": "@kaakaa/slidaiv",
   "displayName": "Slidaiv",
   "description": "Slidaiv extension leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.",
   "publisher": "kaakaa",
   "version": "0.0.7",
-  "repository": "https://github.com/kaakaa/slidaiv",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaakaa/slidaiv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaakaa/slidaiv/issues"
+  },
+  "homepage": "https://github.com/kaakaa/slidaiv#readme",
   "packageManager": "pnpm@9.1.2",
   "engines": {
     "vscode": "^1.89.0",
     "node": ">=18.0.0"
   },
   "bin": {
-    "slidaiv": "./dist/slidaiv-cli.js"
+    "slidaiv": "dist/slidaiv-cli.js"
   },
   "categories": [
     "Other"
