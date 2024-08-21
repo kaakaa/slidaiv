@@ -8,6 +8,10 @@
     "type": "git",
     "url": "git+https://github.com/kaakaa/slidaiv.git"
   },
+  "bugs": {
+    "url": "https://github.com/kaakaa/slidaiv/issues"
+  },
+  "homepage": "https://github.com/kaakaa/slidaiv#readme",
   "packageManager": "pnpm@9.1.2",
   "engines": {
     "vscode": "^1.89.0",
