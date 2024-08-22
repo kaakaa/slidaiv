@@ -1,4 +1,4 @@
-[![Released version](https://img.shields.io/visual-studio-marketplace/v/kaakaa.slidaiv)](https://marketplace.visualstudio.com/items?itemName=kaakaa.slidaiv) [![ci](https://github.com/kaakaa/slidaiv/actions/workflows/cicd.yml/badge.svg)](https://github.com/kaakaa/slidaiv/actions/workflows/cicd.yml)
+[![Released version](https://img.shields.io/visual-studio-marketplace/v/kaakaa.slidaiv)](https://marketplace.visualstudio.com/items?itemName=kaakaa.slidaiv) [![ci](https://github.com/kaakaa/slidaiv/actions/workflows/ci.yml/badge.svg)](https://github.com/kaakaa/slidaiv/actions/workflows/ci.yml)
 
 # Slidaiv
 
