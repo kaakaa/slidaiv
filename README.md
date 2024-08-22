@@ -38,17 +38,6 @@ slidaiv:
   locale: en
 ---
 
-### Extension settings
-
-| Name | Description | Default |
-|:-|:-|:-|
-| API Key | API Key to send request to OpenAI(-compatible) service. | (Set via popup) |
-| Base URL | API endpoint to send request | `https://api.openai.com/v1` |
-| Model | LLM model name | `gpt-3.5-turbo` |
-| Prompt: Generate | System prompt to be used when generating Slidev contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
-| Prompt: Decorate | System prompt to be used when decorating contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
-| Debug | Turn on outputing debug log | `false` |
-
 <!-- Generated contents from here -->
 ## Slide Title: Why You Should Use Slidev
 
@@ -72,6 +61,17 @@ cd .slidev && slidev serve
 # Wrap up
 ...
 ```
+
+### Extension settings
+
+| Name | Description | Default |
+|:-|:-|:-|
+| API Key | API Key to send request to OpenAI(-compatible) service. | (Set via popup) |
+| Base URL | API endpoint to send request | `https://api.openai.com/v1` |
+| Model | LLM model name | `gpt-3.5-turbo` |
+| Prompt: Generate | System prompt to be used when generating Slidev contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
+| Prompt: Decorate | System prompt to be used when decorating contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
+| Debug | Turn on outputing debug log | `false` |
 
 ## CLI
 
