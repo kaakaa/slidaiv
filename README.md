@@ -20,7 +20,7 @@ Slidaiv leverages AI/LLM to automatically generate content for [Slidev](https://
 1. Install [Slidaiv Extension](https://marketplace.visualstudio.com/items?itemName=kaakaa.slidaiv) from VS Code or Marketplace
 2. Set your **API Key** to call OpenAI (or OpenAI-comptible) service
    * If the popup to enter **API Key** didn't open, type `Sliadiv: Set API Key` in the command palette  
-     [![Demo](https://raw.githubusercontent.com/kaakaa/slidaiv/master/resources/slidaiv-vscode-set-api-key.png)](https://github.com/kaakaa/slidaiv/blob/master/resources/slidaiv-vscode-set-api-key.png))
+     [![Demo](https://raw.githubusercontent.com/kaakaa/slidaiv/master/resources/slidaiv-vscode-set-api-key.png)](https://github.com/kaakaa/slidaiv/blob/master/resources/slidaiv-vscode-set-api-key.png)
 3. Configure Slidaiv settings from preferences (see [Extension settings](#extension-settings))
 4. Write prompt in frontmatter and run **(Right click) > Slidaiv > Generate Slide contents** on .md file
 
