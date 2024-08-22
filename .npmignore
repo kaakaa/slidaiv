@@ -19,5 +19,4 @@
 .vscodeignore
 webpack.config.js
 *.vsix
-*.sh
 *.json
