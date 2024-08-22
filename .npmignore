@@ -6,7 +6,6 @@
 !/dist/slidaiv-cli.js
 
 /node_modules/
-/slidev/
 /demo/
 /e2e/
 /out/
