@@ -21,7 +21,7 @@ Slidaiv leverages AI/LLM to automatically generate content for [Slidev](https://
 2. Set your **API Key** to call OpenAI (or OpenAI-comptible) service
    * If the popup to enter **API Key** didn't open, type `Sliadiv: Set API Key` in the command palette  
      [![Demo](https://raw.githubusercontent.com/kaakaa/slidaiv/master/resources/slidaiv-vscode-set-api-key.png)](https://github.com/kaakaa/slidaiv/blob/master/resources/slidaiv-vscode-set-api-key.png))
-3. Configure Slidaiv settings from preferences
+3. Configure Slidaiv settings from preferences (see [Extension settings](#extension-settings))
 4. Write prompt in frontmatter and run **(Right click) > Slidaiv > Generate Slide contents** on .md file
 
 ```md
@@ -37,6 +37,17 @@ slidaiv:
   # VS Code's language setting will be used.
   locale: en
 ---
+
+### Extension settings
+
+| Name | Description | Default |
+|:-|:-|:-|
+| API Key | API Key to send request to OpenAI(-compatible) service. | (Set via popup) |
+| Base URL | API endpoint to send request | `https://api.openai.com/v1` |
+| Model | LLM model name | `gpt-3.5-turbo` |
+| Prompt: Generate | System prompt to be used when generating Slidev contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
+| Prompt: Decorate | System prompt to be used when decorating contents | See [prompts.ts](https://github.com/kaakaa/slidaiv/blob/master/src/client/prompts.ts) |
+| Debug | Turn on outputing debug log | `false` |
 
 <!-- Generated contents from here -->
 ## Slide Title: Why You Should Use Slidev
