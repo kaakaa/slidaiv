@@ -3,7 +3,7 @@
   "displayName": "Slidaiv",
   "description": "Slidaiv extension leverages AI/LLM to automatically generate content for Slidev presentations, making it easier for users to write a Slidev presentation.",
   "publisher": "kaakaa",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaakaa/slidaiv.git"
