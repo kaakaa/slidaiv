@@ -8,6 +8,7 @@ export const CommandIdDecorateContents = 'slidaiv.command.decorateContents';
 
 export const PreferenceIdApiKey = 'slidaiv.apikey';
 
+export const ConfigKeyLLMService = 'llmService';
 export const ConfigKeyApiBaseURL = 'baseUrl';
 export const ConfigKeyLLMModel = 'model';
 export const ConfigKeyPromptGenerate = 'prompt.generate';
