@@ -73,6 +73,15 @@
     "configuration": {
       "title": "Slidaiv",
       "properties": {
+        "slidaiv.llmService": {
+          "type": "string",
+          "default": "openai",
+          "enum": [
+            "openai",
+            "azure-ai-inference"
+          ],
+          "description": "Specify the LLM service to use. (default: openai)"
+        },
         "slidaiv.apiKey": {
           "type": "null",
           "default": null,
