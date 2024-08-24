@@ -1,4 +1,4 @@
-import { Configuration } from "@/model/config";
+import type { Configuration } from "@/model/config";
 import { Client } from "@/client/openai";
 
 export interface LLMClient {
