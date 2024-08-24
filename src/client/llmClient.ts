@@ -1,5 +1,5 @@
 import type { Configuration } from "@/model/config";
-import { Client } from "@/client/openai";
+import { OpenAIClient } from "@/client/openai";
 
 export interface LLMClient {
     generatePageContents(token: CustomCancellationToken, prompt: string, model: string | null, locale: string | null): Promise<string | null>;
@@ -34,7 +34,7 @@ export class LLMClientFactory {
     static create(config: Configuration, locale: string): LLMClient {
         switch (config.service) {
             case 'openai':
-                return new Client(config, locale);
+                return new OpenAIClient(config, locale);
             case 'azure-ai-inference':
             default:
                 return UnconfiguredClient.instance;

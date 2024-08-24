@@ -8,7 +8,7 @@ import { parse } from "@slidev/parser";
 import { Logger } from '@/logger';
 import { loadConfig as loadSettings, SlidevHeader } from '@/cli/util';
 import type { GeneratedSlide } from '@/cli/util';
-import { Client } from '@/client/openai';
+import { OpenAIClient } from '@/client/openai';
 import type { CustomCancellationToken } from '@/client/llmClient';
 import { SlidevPage } from '@/model/slidev';
 
@@ -37,7 +37,7 @@ class CancelHandler implements CustomCancellationToken {
 // Set up
 const multi = new MultiBar({}, Presets.shades_classic);
 const progress = multi.create(settings.slides?.length, 0);
-const client = new Client(settings.context, settings.context.locale);
+const client = new OpenAIClient(settings.context, settings.context.locale);
 
 multi.log("Generating slides...\n");
 
