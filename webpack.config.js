@@ -22,7 +22,8 @@ const extensionConfig = {
   },
   devtool: 'source-map',
   externals: {
-    vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+    vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+    '@azure/core-rest-pipeline': 'commonjs @azure/core-rest-pipeline', // Avoid 'proxyPolicy is not suported in browser environement' error
     // modules added here also need to be added in the .vscodeignore file
   },
   resolve: {
