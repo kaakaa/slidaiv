@@ -1,6 +1,6 @@
 import type { Configuration } from "@/model/config";
 import { OpenAIClient } from "@/client/openai";
-import { AzureAIClient } from "./azure";
+import { AzureAIClient } from "@/client/azure";
 
 export interface LLMClient {
     generatePageContents(token: CustomCancellationToken, prompt: string, model: string | null, locale: string | null): Promise<string | null>;

@@ -6,9 +6,7 @@ import { MultiBar, Presets } from 'cli-progress';
 import { parse } from "@slidev/parser";
 
 import { Logger } from '@/logger';
-import { loadConfig as loadSettings, SlidevHeader } from '@/cli/util';
-import type { GeneratedSlide } from '@/cli/util';
-import { OpenAIClient } from '@/client/openai';
+import { loadConfig as loadSettings, SlidevHeader, type GeneratedSlide } from '@/cli/util';
 import { LLMClientFactory, type CustomCancellationToken } from '@/client/llmClient';
 import { SlidevPage } from '@/model/slidev';
 

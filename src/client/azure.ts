@@ -1,10 +1,11 @@
-import { Configuration } from "@/model/config";
 import createClient from "@azure-rest/ai-inference";
 import type { ChatCompletionsOutput, ModelClient } from "@azure-rest/ai-inference";
 import { AzureKeyCredential } from "@azure/core-auth";
-import { CustomCancellationToken } from "./llmClient";
+
 import { Logger } from "@/logger";
 import { getLocaleName } from "@/utils";
+import type { Configuration } from "@/model/config";
+import type { CustomCancellationToken } from "@/client/llmClient";
 import { evalPromptLiteral, getDefaultPromptDecorateContents, getDefaultPromptForGenerateContents } from "@/client/prompts";
 
 export class AzureAIClient {
@@ -65,7 +66,7 @@ export class AzureAIClient {
         }
         const output: ChatCompletionsOutput = response.body as ChatCompletionsOutput;
         Logger.debug(`  Model: ${output?.model}`);
-        Logger.debug(`  Usage: ${JSON.stringify(output?.usage)}`)
+        Logger.debug(`  Usage: ${JSON.stringify(output?.usage)}`);
         if (output?.choices?.length > 0) {
             return output.choices[0].message.content;
         }
@@ -112,7 +113,7 @@ export class AzureAIClient {
         }
         const output: ChatCompletionsOutput = response.body as ChatCompletionsOutput;
         Logger.debug(`  Model: ${output?.model}`);
-        Logger.debug(`  Usage: ${JSON.stringify(output?.usage)}`)
+        Logger.debug(`  Usage: ${JSON.stringify(output?.usage)}`);
         if (output?.choices?.length > 0) {
             return output.choices[0].message.content;
         }
