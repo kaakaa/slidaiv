@@ -16,9 +16,7 @@ export class AzureAIClient {
 
     constructor(config: Configuration, locale: string) {
         // TODO: to be explained about hardcoded URL
-        Logger.info("Azure AI Inference SDK is initialized.");
         this.client = createClient("https://models.inference.ai.azure.com", new AzureKeyCredential(config.apiKey));
-        Logger.info("Azure AI Inference SDK is DONE.");
         this.model = config.model;
         this.defaultLocale = locale;
         this.promptGenerate = config.promptGenerate;
