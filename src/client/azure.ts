@@ -15,7 +15,6 @@ export class AzureAIClient {
     private defaultLocale: string;
 
     constructor(config: Configuration, locale: string) {
-        // TODO: to be explained about hardcoded URL
         this.client = createClient("https://models.inference.ai.azure.com", new AzureKeyCredential(config.apiKey));
         this.model = config.model;
         this.defaultLocale = locale;

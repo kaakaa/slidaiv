@@ -23,7 +23,6 @@ async function setApiKey() {
 	}
 }
 
-// TODO: enable to select llm client type
 export async function activate(context: vscode.ExtensionContext) {
 	Logger.init(vscode.window.createOutputChannel(ExtensionName).appendLine);
 	SecretApiKeyStore.init(context);
