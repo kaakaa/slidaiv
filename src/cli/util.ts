@@ -43,13 +43,14 @@ title: AI-generated slides
 `;
 
 export function loadConfig(f: string, options: OptionValues): CLISettings {
-    const { input, output, locale, apiurl, apikey, model, debug } = options;
+    const { input, output, locale, service, apiurl, apikey, model, debug } = options;
     const settings = yaml.parse(f) as CLISettings;
 
     const loc = locale ?? settings.context.locale ?? "en";
 
     return {
         context: {
+            service: service ?? settings.context.service ?? "openai",
             apiKey: apikey ?? settings.context.apiKey ?? "dummy",
             baseUrl: apiurl ?? settings.context.baseUrl ?? "https://openai.com/v1",
             model: model ?? settings.context.model ?? "gpt-4o",

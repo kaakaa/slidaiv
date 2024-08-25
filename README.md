@@ -87,6 +87,7 @@ Options:
   -i, --input <file>     input yaml file path to generate slide (default: "slides.yaml")
   -o, --output <file>    output path to write markdown file
   -l, --locale <locale>  locale of generated slide
+  -s, --service <service>  service to use ("openai" or "azure-ai-inference") (default: "openai")
   -u, --apiurl <url>     base url of openai api (e.g.: https://api.openai.com/v1)
   -k, --apikey           api key of openai (or openai-compatible) api
   -m, --model <model>    model of openai api

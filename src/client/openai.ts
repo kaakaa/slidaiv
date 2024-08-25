@@ -10,7 +10,7 @@ import { Logger } from '@/logger';
 import type { CustomCancellationToken, LLMClient } from '@/client/llmClient';
 import type { Configuration } from '@/model/config';
 
-export class Client implements LLMClient {
+export class OpenAIClient implements LLMClient {
     private client: OpenAI;
     private llmModel: string;
     private promptGenerate: string;

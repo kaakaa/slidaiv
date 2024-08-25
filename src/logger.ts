@@ -1,5 +1,3 @@
-import type * as vscode from 'vscode';
-
 export interface LogOutput {
     appendLine: (message: string) => void;
 }

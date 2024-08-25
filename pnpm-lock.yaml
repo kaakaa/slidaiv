@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@azure-rest/ai-inference':
+        specifier: 1.0.0-beta.2
+        version: 1.0.0-beta.2
+      '@azure/core-auth':
+        specifier: ^1.7.2
+        version: 1.7.2
+      '@azure/core-sse':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@slidev/parser':
         specifier: ^0.49.27
         version: 0.49.27(@vue/compiler-sfc@3.4.38)(postcss@8.4.41)(rollup@4.21.0)(typescript@5.4.5)(vite@5.4.2(@types/node@18.19.33)(terser@5.31.0))
@@ -84,6 +93,9 @@ importers:
       eslint-plugin-import:
         specifier: ^2.29.1
         version: 2.29.1(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+      eslint-plugin-unused-imports:
+        specifier: ^4.1.3
+        version: 4.1.3(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
       ts-loader:
         specifier: ^9.5.1
         version: 9.5.1(typescript@5.4.5)(webpack@5.91.0(esbuild@0.23.0)(webpack-cli@5.1.4))
@@ -112,6 +124,14 @@ packages:
   '@antfu/utils@0.7.10':
     resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
 
+  '@azure-rest/ai-inference@1.0.0-beta.2':
+    resolution: {integrity: sha512-xPnXJmldQ7vufTT1GtoHPk+korWFnl72whoDB34tb9DALTGGBKIAWobDQBMGYdV2ce0/KdhRFPwnfeZjNyfVsw==}
+    engines: {node: '>=18.0.0'}
+
+  '@azure-rest/core-client@2.2.0':
+    resolution: {integrity: sha512-2uPSZPRb2TRyYONl5IcsWhX7C1xbm6Gof/tcLlDnYg7fCVcEfASfySKZ9OTHxhNeFgo79LhrT6juEoxTHvrXkQ==}
+    engines: {node: '>=18.0.0'}
+
   '@azure/abort-controller@1.1.0':
     resolution: {integrity: sha512-TrRLIoSQVzfAJX9H1JeFjzAoDGcoK1IYX1UImfceTZpsyYfWr09Ss1aHW1y5TrrR3iq6RZLBwJ3E24uwPhwahw==}
     engines: {node: '>=12.0.0'}
@@ -128,8 +148,16 @@ packages:
     resolution: {integrity: sha512-kRdry/rav3fUKHl/aDLd/pDLcB+4pOFwPPTVEExuMyaI5r+JBbMWqRbCY1pn5BniDaU3lRxO9eaQ1AmSMehl/w==}
     engines: {node: '>=18.0.0'}
 
+  '@azure/core-lro@2.7.2':
+    resolution: {integrity: sha512-0YIpccoX8m/k00O7mDDMdJpbr6mf1yWo2dfmxt5A8XVZVVMz2SSKaEbMCeJRvgQ0IaSlqhjT47p4hVIRRy90xw==}
+    engines: {node: '>=18.0.0'}
+
   '@azure/core-rest-pipeline@1.16.0':
     resolution: {integrity: sha512-CeuTvsXxCUmEuxH5g/aceuSl6w2EugvNHKAtKKVdiX915EjJJxAwfzNNWZreNnbxHZ2fi0zaM6wwS23x2JVqSQ==}
+    engines: {node: '>=18.0.0'}
+
+  '@azure/core-sse@2.1.3':
+    resolution: {integrity: sha512-KSSdIKy8kvWCpYr8Hzpu22j3wcXsVTYE0IlgmI1T/aHvBDsLgV91y90UTfVWnuiuApRLCCVC4gS09ApBGOmYQA==}
     engines: {node: '>=18.0.0'}
 
   '@azure/core-tracing@1.1.2':
@@ -2692,6 +2720,15 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
+  eslint-plugin-unused-imports@4.1.3:
+    resolution: {integrity: sha512-lqrNZIZjFMUr7P06eoKtQLwyVRibvG7N+LtfKtObYGizAAGrcqLkc3tDx+iAik2z7q0j/XI3ihjupIqxhFabFA==}
+    peerDependencies:
+      '@typescript-eslint/eslint-plugin': ^8.0.0-0 || ^7.0.0 || ^6.0.0 || ^5.0.0
+      eslint: ^9.0.0 || ^8.0.0
+    peerDependenciesMeta:
+      '@typescript-eslint/eslint-plugin':
+        optional: true
+
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
     engines: {node: '>=8.0.0'}
@@ -4902,6 +4939,29 @@ snapshots:
 
   '@antfu/utils@0.7.10': {}
 
+  '@azure-rest/ai-inference@1.0.0-beta.2':
+    dependencies:
+      '@azure-rest/core-client': 2.2.0
+      '@azure/abort-controller': 1.1.0
+      '@azure/core-auth': 1.7.2
+      '@azure/core-lro': 2.7.2
+      '@azure/core-rest-pipeline': 1.16.0
+      '@azure/logger': 1.1.2
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - supports-color
+
+  '@azure-rest/core-client@2.2.0':
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      '@azure/core-auth': 1.7.2
+      '@azure/core-rest-pipeline': 1.16.0
+      '@azure/core-tracing': 1.1.2
+      '@azure/core-util': 1.9.0
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - supports-color
+
   '@azure/abort-controller@1.1.0':
     dependencies:
       tslib: 2.6.2
@@ -4928,6 +4988,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@azure/core-lro@2.7.2':
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      '@azure/core-util': 1.9.0
+      '@azure/logger': 1.1.2
+      tslib: 2.6.2
+
   '@azure/core-rest-pipeline@1.16.0':
     dependencies:
       '@azure/abort-controller': 2.1.2
@@ -4940,6 +5007,10 @@ snapshots:
       tslib: 2.6.2
     transitivePeerDependencies:
       - supports-color
+
+  '@azure/core-sse@2.1.3':
+    dependencies:
+      tslib: 2.6.2
 
   '@azure/core-tracing@1.1.2':
     dependencies:
@@ -8165,6 +8236,12 @@ snapshots:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
+
+  eslint-plugin-unused-imports@4.1.3(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0):
+    dependencies:
+      eslint: 8.57.0
+    optionalDependencies:
+      '@typescript-eslint/eslint-plugin': 7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
 
   eslint-scope@5.1.1:
     dependencies:

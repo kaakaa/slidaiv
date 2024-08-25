@@ -2,18 +2,16 @@ import * as vscode from 'vscode';
 
 import { CommandIdDecorateContents, CommandIdGenerateContents, CommandIdOpenSettingsApiKey, CommandIdSetApiKey, ExtensionID, ExtensionName, MessageSelectionSetApiKey, MessageSetApiKey, PreferenceIdApiKey } from '@/constants';
 import { SecretTokenStore as SecretApiKeyStore } from '@/secret';
-import { Client } from '@/client/openai';
 import { Logger } from '@/logger';
 import { doTaskWithProgress, getTaskDecorateContent, getTaskGenerateContents } from '@/tasks';
 import { readConfiguration } from '@/model/config';
-import { UnconfiguredClient } from '@/client/llmClient';
+import { LLMClientFactory, UnconfiguredClient } from '@/client/llmClient';
 import type { LLMClient } from '@/client/llmClient';
 
-async function initialize() {
+async function initialize(): Promise<LLMClient> {
 	const config = await readConfiguration();
 	Logger.isDebug = config.isDebug;
-	const client = new Client(config, vscode.env.language);
-	return client;
+	return LLMClientFactory.create(config, vscode.env.language);
 }
 
 async function setApiKey() {
